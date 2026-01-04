@@ -19,6 +19,9 @@ type Destination = {
 type LightboxProps = {
   destination: Destination | null;
   onClose: () => void;
+  currentPlaceIndex?: number;
+  onNext?: () => void;
+  onPrev?: () => void;
 };
 
 export default function Lightbox({ destination, onClose }: LightboxProps) {

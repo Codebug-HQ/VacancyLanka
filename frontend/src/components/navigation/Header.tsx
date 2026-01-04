@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
@@ -11,8 +11,10 @@ import { request } from 'graphql-request';
 import { useLoading } from '@/context/LoadingContext';
 
 interface HeaderProps {
-  setIsMobileMenuOpen: (v: boolean) => void;
   isMobileMenuOpen: boolean;
+  setIsMobileMenuOpen: Dispatch<SetStateAction<boolean>>;
+  isMegaMenuOpen: boolean;               // Add this
+  setIsMegaMenuOpen: Dispatch<SetStateAction<boolean>>; // Add this
 }
 
 const GET_NAVIGATION = `

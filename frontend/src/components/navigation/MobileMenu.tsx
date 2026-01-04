@@ -13,7 +13,8 @@ import {
   Twitter, 
   Linkedin, 
   MapPin, 
-  MessageCircle 
+  MessageCircle, 
+  ChevronDown
 } from 'lucide-react';
 
 const GET_NAVIGATION = `
@@ -142,7 +143,7 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                 <div onClick={() => toggleSection('packages')} className={accordionTitleStyle}>
                   Packages
                   <motion.div animate={{ rotate: openSection === 'packages' ? 180 : 0, color: openSection === 'packages' ? '#EF476F' : '#ffffff' }}>
-                    <Icon type="chevron" className="w-6 h-6" />
+                  <ChevronDown className="w-6 h-6" />                  
                   </motion.div>
                 </div>
                 
@@ -168,8 +169,8 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                 <div onClick={() => toggleSection('activities')} className={accordionTitleStyle}>
                   Activities
                   <motion.div animate={{ rotate: openSection === 'activities' ? 180 : 0, color: openSection === 'activities' ? '#EF476F' : '#ffffff' }}>
-                    <Icon type="chevron" className="w-6 h-6" />
-                  </motion.div>
+<ChevronDown className="w-6 h-6" />                  
+</motion.div>
                 </div>
 
                 <AnimatePresence>

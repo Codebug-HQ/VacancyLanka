@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useRef, useState, MouseEvent } from 'react';
-import { motion } from 'framer-motion';
+import { HTMLMotionProps, motion } from 'framer-motion';
 import { twMerge } from 'tailwind-merge';
 
-interface MagneticButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface MagneticButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
   children: React.ReactNode;
   className?: string;
 }

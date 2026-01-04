@@ -132,7 +132,7 @@ export default function DestinationGrid() {
             };
           })
           // Sort by districtOrder ASC
-          .sort((a, b) => a.districtOrder - b.districtOrder);
+          formatted.sort((a, b) => a.districtOrder - b.districtOrder);
 
         setDestinations(formatted);
       } catch (err) {
