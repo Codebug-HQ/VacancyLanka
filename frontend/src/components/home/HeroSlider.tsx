@@ -6,6 +6,7 @@ import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { request } from 'graphql-request';
+import { getProxiedImageUrl } from '@/app/api/image-proxy/utils';
 import { useLoading } from '@/context/LoadingContext';
 
 // Styles
@@ -83,7 +84,7 @@ export default function InteractiveHero() {
             title: node.title,
             location: node.sliderDetails.tag,
             description: node.sliderDetails.shortDescription,
-            image: node.featuredImage.node.sourceUrl,
+            image: getProxiedImageUrl(node.featuredImage.node.sourceUrl),
           }));
 
         setSlides(sortedSlides);
@@ -128,7 +129,7 @@ export default function InteractiveHero() {
                 fill
                 className="object-cover"
                 priority={index === 0}
-                unoptimized // Important for external/local WP uploads
+                unoptimized
               />
               <div className="absolute inset-0 bg-black/40" />
             </motion.div>
