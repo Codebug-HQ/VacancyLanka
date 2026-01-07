@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { request } from 'graphql-request';
 import { useLoading } from '@/context/LoadingContext';
+import { getProxiedImageUrl } from '@/lib/image-proxy';
 
 const GET_ACTIVITIES = `
   query GetActivities {
@@ -133,7 +134,7 @@ export default function ActivitiesGrid() {
               {/* Background Image */}
               <div className="absolute inset-0 transition-transform duration-1000 ease-out group-hover:scale-110">
                 <Image 
-                  src={act.featuredImage?.node?.sourceUrl || 'https://via.placeholder.com/800'}
+                  src={getProxiedImageUrl(act.featuredImage?.node?.sourceUrl || '')}
                   alt={act.title}
                   fill 
                   className="object-cover"

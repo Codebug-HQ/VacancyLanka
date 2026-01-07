@@ -10,6 +10,7 @@ import { request } from 'graphql-request';
 import Image from 'next/image';
 import BookWidget from '../ui/BookWidget';
 import { useLoading } from '@/context/LoadingContext';
+import { getProxiedImageUrl } from '@/lib/image-proxy';
 
 // Icon Map
 const ICON_MAP: { [key: string]: React.ReactNode } = {
@@ -146,7 +147,7 @@ export default function PackagesGrid() {
               className="group relative h-[320px] sm:h-[400px] rounded-[1.5rem] overflow-hidden shadow-xl border border-gray-100"
             >
               <Image
-                src={details.image?.node?.sourceUrl || 'https://via.placeholder.com/800'}
+                src={getProxiedImageUrl(details.image?.node?.sourceUrl || '')}
                 alt={pkg.title}
                 fill
                 unoptimized

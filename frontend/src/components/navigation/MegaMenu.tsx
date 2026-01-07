@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { twMerge } from 'tailwind-merge';
 import MagneticButton from '../ui/MagneticButton'; // Use our new magnetic button
+import { getProxiedImageUrl } from '@/lib/image-proxy';
 
 // Close Icon for the menu
 const CloseIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -122,7 +123,7 @@ export default function MegaMenu({ isOpen, setIsOpen }: MegaMenuProps) {
                 className="group relative h-96 overflow-hidden rounded-lg shadow-2xl hover:scale-[1.02] transition-transform duration-300 ease-in-out"
               >
                 <Image
-                  src={item.image}
+                  src={getProxiedImageUrl(item.image)}
                   alt={item.title}
                   fill
                   className="object-cover brightness-[0.6] group-hover:brightness-[0.7] group-hover:scale-105 transition-all duration-500"

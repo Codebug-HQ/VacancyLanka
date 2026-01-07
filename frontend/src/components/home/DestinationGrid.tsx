@@ -8,6 +8,7 @@ import SriLankaMap from '../ui/SriLankaMap';
 import Lightbox from '../shared/Lightbox';
 import { useLoading } from '@/context/LoadingContext';
 import { s } from 'framer-motion/client';
+import { getProxiedImageUrl } from '@/lib/image-proxy';
 
 const GET_DESTINATIONS = `
   query GetDestinations {
@@ -227,7 +228,7 @@ export default function DestinationGrid() {
                       style={{ flex: isHovered ? 4.5 : (isSiblingHovered ? 0.6 : 1) }}
                     >
                       <Image
-                        src={dest.image}
+                        src={getProxiedImageUrl(dest.image)}
                         alt={dest.name}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -282,7 +283,7 @@ export default function DestinationGrid() {
                   className="snap-start h-[300px] flex-none w-[85vw] max-w-sm relative overflow-hidden rounded-3xl cursor-pointer group shadow-lg"
                 >
                   <Image
-                    src={dest.image}
+                    src={getProxiedImageUrl(dest.image)}
                     alt={dest.name}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"

@@ -8,6 +8,7 @@ import { request } from 'graphql-request';
 import ReserveWidget from '../ui/ReserveWidget';
 import { useLoading } from '@/context/LoadingContext';
 import { s } from 'framer-motion/client';
+import { getProxiedImageUrl } from '@/lib/image-proxy';
 
 const GET_VEHICLES = `
   query GetVehicles {
@@ -130,7 +131,7 @@ export default function VehiclesSection() {
       {/* Image Container with Gradient Overlay */}
       <div className="relative h-56 md:h-64 overflow-hidden">
         <Image
-          src={car.featuredImage?.node?.sourceUrl || 'https://via.placeholder.com/800'}
+          src={getProxiedImageUrl(car.featuredImage?.node?.sourceUrl || '')}
           alt={car.title}
           fill
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
