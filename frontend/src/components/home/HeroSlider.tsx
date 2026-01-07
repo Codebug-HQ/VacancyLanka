@@ -6,7 +6,7 @@ import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { request } from 'graphql-request';
-import { getProxiedImageUrl } from '@/app/api/image-proxy/utils';
+import { getProxiedImageUrl } from '@/lib/image-proxy';
 import { useLoading } from '@/context/LoadingContext';
 
 // Styles
