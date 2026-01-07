@@ -11,9 +11,10 @@ import {
   Linkedin,
   MapPin
 } from 'lucide-react';
+import { graphqlClient } from '@/lib/graphql-client';
 
 // Define only what we need for the footer
-interface FooterData {
+interface OwnerInfo {
   office_phone: string;
   email: string;
   office_address: string;
@@ -39,7 +40,9 @@ const footerLinks = {
 };
 
 export default function Footer() {
-  const [data, setData] = useState<FooterData | null>(null);
+  const [data, setData] = useState<OwnerInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchFooterData = async () => {
@@ -58,17 +61,17 @@ export default function Footer() {
       `;
 
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL!, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query }),
-        });
-        const result = await response.json();
-        if (result.data?.ownerInfo) {
-          setData(result.data.ownerInfo);
+        const result = await graphqlClient.request<{ ownerInfo: OwnerInfo }>(query);
+        
+        if (result?.ownerInfo) {
+          setData(result.ownerInfo);
         }
-      } catch (error) {
-        console.error("Footer data fetch error:", error);
+      } catch (err: any) {
+        console.error("Footer data fetch error:", err);
+        setError('Failed to load contact info');
+        // Optional: you can use handleGraphQLError(err) here if you import it
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -81,7 +84,7 @@ export default function Footer() {
     { icon: <Instagram size={18} />, href: data.insta_address },
     { icon: <Twitter size={18} />, href: data.twitter_address },
     { icon: <Linkedin size={18} />, href: data.linkedin_address },
-  ].filter(link => link.href && link.href !== '#') : [];
+  ].filter(link => link.href && link.href.trim() !== '' && link.href !== '#') : [];
 
   return (
     <footer className="bg-slate-900 text-white pt-20 pb-10 px-6 border-t border-white/5">
@@ -126,43 +129,51 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Contact & Social (DYNAMIC) */}
+          {/* Column 4: Contact & Social */}
           <div className="space-y-6">
             <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#EF476F]">Get In Touch</h4>
-            <div className="space-y-4">
-              {data?.office_phone && (
-                <a href={`tel:${data.office_phone}`} className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group">
-                  <Phone size={16} className="text-slate-500 group-hover:text-[#EF476F] shrink-0" />
-                  <span className="text-sm font-bold">{data.office_phone}</span>
-                </a>
-              )}
-              {data?.email && (
-                <a href={`mailto:${data.email}`} className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group">
-                  <Mail size={16} className="text-slate-500 group-hover:text-[#EF476F] shrink-0" />
-                  <span className="text-sm font-bold break-all">{data.email}</span>
-                </a>
-              )}
-              {data?.office_address && (
-                <div className="flex items-start gap-3 text-slate-400">
-                  <MapPin size={16} className="text-slate-500 shrink-0 mt-1" />
-                  <span className="text-sm">{data.office_address}</span>
-                </div>
-              )}
-            </div>
+            
+            {loading && <p className="text-slate-500 text-sm">Loading contact info...</p>}
+            {error && <p className="text-red-400 text-sm">{error}</p>}
 
-            <div className="flex gap-5 pt-2">
-              {socialLinks.map((social, idx) => (
-                <a
-                  key={idx}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-slate-500 hover:text-[#EF476F] transition-all duration-300 transform hover:scale-110"
-                >
-                  {social.icon}
-                </a>
-              ))}
-            </div>
+            {!loading && !error && (
+              <div className="space-y-4">
+                {data?.office_phone && (
+                  <a href={`tel:${data.office_phone}`} className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group">
+                    <Phone size={16} className="text-slate-500 group-hover:text-[#EF476F] shrink-0" />
+                    <span className="text-sm font-bold">{data.office_phone}</span>
+                  </a>
+                )}
+                {data?.email && (
+                  <a href={`mailto:${data.email}`} className="flex items-center gap-3 text-slate-400 hover:text-white transition-colors group">
+                    <Mail size={16} className="text-slate-500 group-hover:text-[#EF476F] shrink-0" />
+                    <span className="text-sm font-bold break-all">{data.email}</span>
+                  </a>
+                )}
+                {data?.office_address && (
+                  <div className="flex items-start gap-3 text-slate-400">
+                    <MapPin size={16} className="text-slate-500 shrink-0 mt-1" />
+                    <span className="text-sm">{data.office_address}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {socialLinks.length > 0 && (
+              <div className="flex gap-5 pt-6">
+                {socialLinks.map((social, idx) => (
+                  <a
+                    key={idx}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-slate-500 hover:text-[#EF476F] transition-all duration-300 transform hover:scale-110"
+                  >
+                    {social.icon}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
