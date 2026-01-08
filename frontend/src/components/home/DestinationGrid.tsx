@@ -94,15 +94,16 @@ export default function DestinationGrid() {
         const formatted: Destination[] = (data.destinations?.nodes || [])
           .map((node: any) => {
             const details = node.destinationsDetails || {};
+            // Typed array to prevent the "implicitly has any type" error
             const places: Place[] = [];
             
-            // Helper to extract spot data - match your working VehiclesSection pattern
+            // Helper to extract spot data exactly like your other components
             const extractSpot = (spot: any) => {
-              if (spot?.title && spot?.image?.node?.sourceUrl) {
+              if (spot?.title) {
                 places.push({
                   title: spot.title,
                   description: spot.description || '',
-                  image: getProxiedImageUrl(spot.image.node.sourceUrl),
+                  image: getProxiedImageUrl(spot.image?.node?.sourceUrl || ''),
                 });
               }
             };
@@ -119,8 +120,6 @@ export default function DestinationGrid() {
               districtOrder: details.districtOrder ?? 999,
             };
           })
-          // Filter out destinations without valid images
-          .filter((dest: Destination) => dest.image && dest.image !== getProxiedImageUrl(''))
           .sort((a: Destination, b: Destination) => a.districtOrder - b.districtOrder);
 
         setDestinations(formatted);
@@ -163,7 +162,7 @@ export default function DestinationGrid() {
               Crafting Unforgettable Journeys in <span className="text-[#EF476F]">Paradise</span>
             </h2>
             <p className="text-lg text-gray-500 max-w-xl leading-relaxed font-medium">
-              At VacayLanka, we believe travel is more than just visiting places — it's about creating stories you'll carry forever.
+              At VacayLanka, we believe travel is more than just visiting places — it’s about creating stories you’ll carry forever.
             </p>
           </motion.div>
           
@@ -201,14 +200,8 @@ export default function DestinationGrid() {
                     <motion.div
                       key={globalIndex}
                       layout
-                      onMouseEnter={() => {
-                        setHoveredIndex(globalIndex);
-                        setHoveredDistrict(dest.name);
-                      }}
-                      onMouseLeave={() => {
-                        setHoveredIndex(null);
-                        setHoveredDistrict(null);
-                      }}
+                      onMouseEnter={() => setHoveredIndex(globalIndex)}
+                      onMouseLeave={() => setHoveredIndex(null)}
                       onClick={() => {
                         setSelectedDest(dest);
                         setCurrentPlaceIndex(0);
