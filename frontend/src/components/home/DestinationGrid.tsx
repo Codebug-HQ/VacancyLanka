@@ -96,14 +96,13 @@ export default function DestinationGrid() {
             const details = node.destinationsDetails || {};
             const places: Place[] = [];
             
+            // Helper to extract spot data - match your working VehiclesSection pattern
             const extractSpot = (spot: any) => {
-              const url = spot?.image?.node?.sourceUrl;
-              if (spot?.title && url) {
+              if (spot?.title && spot?.image?.node?.sourceUrl) {
                 places.push({
                   title: spot.title,
                   description: spot.description || '',
-                  // Use the exact same utility as VehiclesSection
-                  image: getProxiedImageUrl(url.trim()),
+                  image: getProxiedImageUrl(spot.image.node.sourceUrl),
                 });
               }
             };
@@ -112,16 +111,16 @@ export default function DestinationGrid() {
             extractSpot(details.spot2);
             extractSpot(details.spot3);
 
-            const mainImage = node.featuredImage?.node?.sourceUrl;
-
             return {
               name: node.title,
               desc: details.shortDescription || 'Discover this beautiful destination',
-              image: mainImage ? getProxiedImageUrl(mainImage.trim()) : '',
+              image: getProxiedImageUrl(node.featuredImage?.node?.sourceUrl || ''),
               places,
               districtOrder: details.districtOrder ?? 999,
             };
           })
+          // Filter out destinations without valid images
+          .filter((dest: Destination) => dest.image && dest.image !== getProxiedImageUrl(''))
           .sort((a: Destination, b: Destination) => a.districtOrder - b.districtOrder);
 
         setDestinations(formatted);
@@ -150,7 +149,7 @@ export default function DestinationGrid() {
   }
 
   return (
-    <section className="overflow-hidden bg-[#fafafa] py-16 md:py-24">
+    <section className="overflow-hidden bg-[#fafafa]">
       <div className="max-w-7xl mx-auto mb-12 px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -164,7 +163,7 @@ export default function DestinationGrid() {
               Crafting Unforgettable Journeys in <span className="text-[#EF476F]">Paradise</span>
             </h2>
             <p className="text-lg text-gray-500 max-w-xl leading-relaxed font-medium">
-              At VacayLanka, we believe travel is more than just visiting places — it’s about creating stories you’ll carry forever.
+              At VacayLanka, we believe travel is more than just visiting places — it's about creating stories you'll carry forever.
             </p>
           </motion.div>
           
@@ -181,6 +180,7 @@ export default function DestinationGrid() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4">
+        {/* Desktop Accordion */}
         <div className="hidden md:flex md:flex-col gap-6">
           {rows.map((row, rowIndex) => {
             const isRowActive = hoveredIndex !== null && Math.floor(hoveredIndex / 5) === rowIndex;
@@ -201,8 +201,14 @@ export default function DestinationGrid() {
                     <motion.div
                       key={globalIndex}
                       layout
-                      onMouseEnter={() => setHoveredIndex(globalIndex)}
-                      onMouseLeave={() => setHoveredIndex(null)}
+                      onMouseEnter={() => {
+                        setHoveredIndex(globalIndex);
+                        setHoveredDistrict(dest.name);
+                      }}
+                      onMouseLeave={() => {
+                        setHoveredIndex(null);
+                        setHoveredDistrict(null);
+                      }}
                       onClick={() => {
                         setSelectedDest(dest);
                         setCurrentPlaceIndex(0);
@@ -210,16 +216,14 @@ export default function DestinationGrid() {
                       className="relative overflow-hidden rounded-[2.5rem] cursor-pointer group shadow-2xl bg-slate-200"
                       style={{ flex: isHovered ? 5 : (isSiblingHovered ? 0.6 : 1) }}
                     >
-                      {dest.image && (
-                        <Image
-                          src={dest.image}
-                          alt={dest.name}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-110"
-                          unoptimized
-                          priority={globalIndex < 5}
-                        />
-                      )}
+                      <Image
+                        src={dest.image}
+                        alt={dest.name}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        unoptimized
+                        priority={globalIndex < 5}
+                      />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                       <div className="absolute inset-0 p-8 flex flex-col justify-end">
                         <AnimatePresence>
@@ -249,6 +253,7 @@ export default function DestinationGrid() {
           })}
         </div>
 
+        {/* Mobile Carousel */}
         <div className="md:hidden">
           <div className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide">
             {destinations.map((dest, index) => (
@@ -258,17 +263,15 @@ export default function DestinationGrid() {
                   setSelectedDest(dest);
                   setCurrentPlaceIndex(0);
                 }}
-                className="snap-center shrink-0 w-[85vw] h-[450px] relative rounded-[2rem] overflow-hidden shadow-xl bg-slate-200"
+                className="snap-center shrink-0 w-[85vw] h-[450px] relative rounded-[2rem] overflow-hidden shadow-xl"
               >
-                {dest.image && (
-                  <Image
-                    src={dest.image}
-                    alt={dest.name}
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                )}
+                <Image
+                  src={dest.image}
+                  alt={dest.name}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
                 <div className="absolute bottom-0 p-8">
                   <h3 className="text-white font-black text-3xl uppercase tracking-tighter">{dest.name}</h3>

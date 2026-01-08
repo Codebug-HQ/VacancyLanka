@@ -113,7 +113,7 @@ export default function ContactSection() {
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-12 text-center">
+      <div className="max-w-7xl mx-auto text-center">
         <p className="text-red-600 font-medium">{error}</p>
       </div>
     );
@@ -124,7 +124,7 @@ export default function ContactSection() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-7xl mx-auto">
       <div className="text-center mb-16">
         <motion.span
           initial={{ opacity: 0 }}
