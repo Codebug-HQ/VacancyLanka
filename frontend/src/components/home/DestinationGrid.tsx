@@ -62,24 +62,25 @@ const getProxyEndpoint = () => {
 };
 
 // Helper to handle both Remote and Local images safely
-const resolveImageUrl = (url: string | null | undefined) => {
+const resolveImageUrl = (url: string | null | undefined): string => {
   if (!url) return '/images/placeholder.png';
-  // If it's an external URL, proxy it. If it's local (/images/...), return as is.
   if (url.startsWith('http')) {
     return getProxiedImageUrl(url);
   }
   return url;
 };
 
+interface Place {
+  title: string;
+  description: string;
+  image: string;
+}
+
 interface Destination {
   name: string;
   desc: string;
   image: string;
-  places: Array<{
-    title: string;
-    description: string;
-    image: string;
-  }>;
+  places: Place[];
   districtOrder: number;
 }
 
@@ -101,9 +102,9 @@ export default function DestinationGrid() {
         const formatted: Destination[] = (data.destinations?.nodes || [])
           .map((node: any) => {
             const details = node.destinationsDetails || {};
-            const places = [];
+            // FIX: Explicitly typing the array to satisfy TypeScript build
+            const places: Place[] = [];
             
-            // Helper to extract spot data safely
             const extractSpot = (spot: any) => {
               if (spot?.title) {
                 places.push({
@@ -148,13 +149,13 @@ export default function DestinationGrid() {
     setCurrentPlaceIndex((prev) => (prev - 1 + selectedDest.places.length) % selectedDest.places.length);
   };
 
-  const rows = [];
+  const rows: Destination[][] = [];
   for (let i = 0; i < destinations.length; i += 5) {
     rows.push(destinations.slice(i, i + 5));
   }
 
   return (
-    <section className="overflow-hidden bg-[#fafafa] py-20">
+    <section className="overflow-hidden bg-[#fafafa] py-16 md:py-24">
       <div className="max-w-7xl mx-auto mb-12 px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -164,11 +165,11 @@ export default function DestinationGrid() {
             viewport={{ once: true }}
             className="lg:border-l-8 border-[#EF476F] lg:pl-12"
           >
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tighter leading-[0.9]">
+            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-8 tracking-tighter leading-[0.9]">
               Crafting Unforgettable Journeys in <span className="text-[#EF476F]">Paradise</span>
             </h2>
-            <p className="text-md text-gray-500 max-w-xl leading-relaxed font-medium">
-              At VacayLanka, we design every detail with care and passion. Whether it’s a curated holiday package or a luxury vehicle rental, we’re here to make your adventure seamless.
+            <p className="text-lg text-gray-500 max-w-xl leading-relaxed font-medium">
+              At VacayLanka, we believe travel is more than just visiting places — it’s about creating stories you’ll carry forever.
             </p>
           </motion.div>
           
@@ -185,7 +186,7 @@ export default function DestinationGrid() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4">
-        {/* Desktop Accordion Grid */}
+        {/* Desktop Accordion */}
         <div className="hidden md:flex md:flex-col gap-6">
           {rows.map((row, rowIndex) => {
             const isRowActive = hoveredIndex !== null && Math.floor(hoveredIndex / 5) === rowIndex;
@@ -194,8 +195,8 @@ export default function DestinationGrid() {
             return (
               <motion.div
                 key={rowIndex}
-                animate={{ filter: isOtherRowActive ? 'brightness(0.7)' : 'brightness(1)' }}
-                className="flex gap-4 h-[400px]"
+                animate={{ filter: isOtherRowActive ? 'brightness(0.6)' : 'brightness(1)' }}
+                className="flex gap-4 h-[380px]"
               >
                 {row.map((dest, colIndex) => {
                   const globalIndex = rowIndex * 5 + colIndex;
@@ -212,8 +213,8 @@ export default function DestinationGrid() {
                         setSelectedDest(dest);
                         setCurrentPlaceIndex(0);
                       }}
-                      className="relative overflow-hidden rounded-[2rem] cursor-pointer group shadow-xl bg-slate-200"
-                      style={{ flex: isHovered ? 4 : (isSiblingHovered ? 0.7 : 1) }}
+                      className="relative overflow-hidden rounded-[2.5rem] cursor-pointer group shadow-2xl bg-slate-100"
+                      style={{ flex: isHovered ? 5 : (isSiblingHovered ? 0.6 : 1) }}
                     >
                       <Image
                         src={dest.image}
@@ -221,21 +222,28 @@ export default function DestinationGrid() {
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
                         unoptimized
+                        priority={globalIndex < 5}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                       <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                        {!isSiblingHovered && (
-                          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                            <h3 className={`font-black text-white uppercase tracking-tighter transition-all ${isHovered ? 'text-4xl' : 'text-xl'}`}>
-                              {dest.name}
-                            </h3>
-                            {isHovered && (
-                              <p className="text-gray-200 mt-2 text-sm max-w-xs line-clamp-2">
-                                {dest.desc}
-                              </p>
-                            )}
-                          </motion.div>
-                        )}
+                        <AnimatePresence>
+                          {!isSiblingHovered && (
+                            <motion.div 
+                              initial={{ opacity: 0, y: 10 }} 
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0 }}
+                            >
+                              <h3 className={`font-black text-white uppercase tracking-tighter transition-all duration-500 ${isHovered ? 'text-5xl' : 'text-2xl'}`}>
+                                {dest.name}
+                              </h3>
+                              {isHovered && (
+                                <p className="text-gray-200 mt-3 text-lg max-w-md line-clamp-2">
+                                  {dest.desc}
+                                </p>
+                              )}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     </motion.div>
                   );
@@ -247,7 +255,7 @@ export default function DestinationGrid() {
 
         {/* Mobile Carousel */}
         <div className="md:hidden">
-          <div className="flex gap-4 overflow-x-auto pb-8 snap-x scrollbar-hide">
+          <div className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide">
             {destinations.map((dest, index) => (
               <div
                 key={index}
@@ -255,7 +263,7 @@ export default function DestinationGrid() {
                   setSelectedDest(dest);
                   setCurrentPlaceIndex(0);
                 }}
-                className="snap-center shrink-0 w-[80vw] h-[400px] relative rounded-3xl overflow-hidden shadow-lg"
+                className="snap-center shrink-0 w-[85vw] h-[450px] relative rounded-[2rem] overflow-hidden shadow-xl"
               >
                 <Image
                   src={dest.image}
@@ -264,10 +272,10 @@ export default function DestinationGrid() {
                   className="object-cover"
                   unoptimized
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                <div className="absolute bottom-0 p-6">
-                  <h3 className="text-white font-black text-2xl uppercase">{dest.name}</h3>
-                  <p className="text-white/80 text-xs mt-2">{dest.desc}</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
+                <div className="absolute bottom-0 p-8">
+                  <h3 className="text-white font-black text-3xl uppercase tracking-tighter">{dest.name}</h3>
+                  <p className="text-white/80 text-sm mt-2 line-clamp-2">{dest.desc}</p>
                 </div>
               </div>
             ))}
@@ -275,13 +283,15 @@ export default function DestinationGrid() {
         </div>
       </div>
 
-      <Lightbox
-        destination={selectedDest}
-        onClose={() => setSelectedDest(null)}
-        currentPlaceIndex={currentPlaceIndex}
-        onNext={nextPlace}
-        onPrev={prevPlace}
-      />
+      {selectedDest && (
+        <Lightbox
+          destination={selectedDest}
+          onClose={() => setSelectedDest(null)}
+          currentPlaceIndex={currentPlaceIndex}
+          onNext={nextPlace}
+          onPrev={prevPlace}
+        />
+      )}
     </section>
   );
 }
