@@ -94,16 +94,16 @@ export default function DestinationGrid() {
         const formatted: Destination[] = (data.destinations?.nodes || [])
           .map((node: any) => {
             const details = node.destinationsDetails || {};
-            // Typed array to prevent the "implicitly has any type" error
             const places: Place[] = [];
             
-            // Helper to extract spot data exactly like your other components
             const extractSpot = (spot: any) => {
-              if (spot?.title) {
+              const url = spot?.image?.node?.sourceUrl;
+              if (spot?.title && url) {
                 places.push({
                   title: spot.title,
                   description: spot.description || '',
-                  image: getProxiedImageUrl(spot.image?.node?.sourceUrl || ''),
+                  // Use the exact same utility as VehiclesSection
+                  image: getProxiedImageUrl(url.trim()),
                 });
               }
             };
@@ -112,10 +112,12 @@ export default function DestinationGrid() {
             extractSpot(details.spot2);
             extractSpot(details.spot3);
 
+            const mainImage = node.featuredImage?.node?.sourceUrl;
+
             return {
               name: node.title,
               desc: details.shortDescription || 'Discover this beautiful destination',
-              image: getProxiedImageUrl(node.featuredImage?.node?.sourceUrl || ''),
+              image: mainImage ? getProxiedImageUrl(mainImage.trim()) : '',
               places,
               districtOrder: details.districtOrder ?? 999,
             };
@@ -179,7 +181,6 @@ export default function DestinationGrid() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4">
-        {/* Desktop Accordion */}
         <div className="hidden md:flex md:flex-col gap-6">
           {rows.map((row, rowIndex) => {
             const isRowActive = hoveredIndex !== null && Math.floor(hoveredIndex / 5) === rowIndex;
@@ -209,14 +210,16 @@ export default function DestinationGrid() {
                       className="relative overflow-hidden rounded-[2.5rem] cursor-pointer group shadow-2xl bg-slate-200"
                       style={{ flex: isHovered ? 5 : (isSiblingHovered ? 0.6 : 1) }}
                     >
-                      <Image
-                        src={dest.image}
-                        alt={dest.name}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                        unoptimized
-                        priority={globalIndex < 5}
-                      />
+                      {dest.image && (
+                        <Image
+                          src={dest.image}
+                          alt={dest.name}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                          unoptimized
+                          priority={globalIndex < 5}
+                        />
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                       <div className="absolute inset-0 p-8 flex flex-col justify-end">
                         <AnimatePresence>
@@ -246,7 +249,6 @@ export default function DestinationGrid() {
           })}
         </div>
 
-        {/* Mobile Carousel */}
         <div className="md:hidden">
           <div className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide">
             {destinations.map((dest, index) => (
@@ -256,15 +258,17 @@ export default function DestinationGrid() {
                   setSelectedDest(dest);
                   setCurrentPlaceIndex(0);
                 }}
-                className="snap-center shrink-0 w-[85vw] h-[450px] relative rounded-[2rem] overflow-hidden shadow-xl"
+                className="snap-center shrink-0 w-[85vw] h-[450px] relative rounded-[2rem] overflow-hidden shadow-xl bg-slate-200"
               >
-                <Image
-                  src={dest.image}
-                  alt={dest.name}
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
+                {dest.image && (
+                  <Image
+                    src={dest.image}
+                    alt={dest.name}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
                 <div className="absolute bottom-0 p-8">
                   <h3 className="text-white font-black text-3xl uppercase tracking-tighter">{dest.name}</h3>
