@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
@@ -61,15 +62,6 @@ const getProxyEndpoint = () => {
   return '/api/graphql/proxy';
 };
 
-// Helper to handle both Remote and Local images safely
-const resolveImageUrl = (url: string | null | undefined): string => {
-  if (!url) return '/images/placeholder.png';
-  if (url.startsWith('http')) {
-    return getProxiedImageUrl(url);
-  }
-  return url;
-};
-
 interface Place {
   title: string;
   description: string;
@@ -102,15 +94,16 @@ export default function DestinationGrid() {
         const formatted: Destination[] = (data.destinations?.nodes || [])
           .map((node: any) => {
             const details = node.destinationsDetails || {};
-            // FIX: Explicitly typing the array to satisfy TypeScript build
+            // Typed array to prevent the "implicitly has any type" error
             const places: Place[] = [];
             
+            // Helper to extract spot data exactly like your other components
             const extractSpot = (spot: any) => {
               if (spot?.title) {
                 places.push({
                   title: spot.title,
                   description: spot.description || '',
-                  image: resolveImageUrl(spot.image?.node?.sourceUrl),
+                  image: getProxiedImageUrl(spot.image?.node?.sourceUrl || ''),
                 });
               }
             };
@@ -122,7 +115,7 @@ export default function DestinationGrid() {
             return {
               name: node.title,
               desc: details.shortDescription || 'Discover this beautiful destination',
-              image: resolveImageUrl(node.featuredImage?.node?.sourceUrl),
+              image: getProxiedImageUrl(node.featuredImage?.node?.sourceUrl || ''),
               places,
               districtOrder: details.districtOrder ?? 999,
             };
@@ -213,7 +206,7 @@ export default function DestinationGrid() {
                         setSelectedDest(dest);
                         setCurrentPlaceIndex(0);
                       }}
-                      className="relative overflow-hidden rounded-[2.5rem] cursor-pointer group shadow-2xl bg-slate-100"
+                      className="relative overflow-hidden rounded-[2.5rem] cursor-pointer group shadow-2xl bg-slate-200"
                       style={{ flex: isHovered ? 5 : (isSiblingHovered ? 0.6 : 1) }}
                     >
                       <Image
