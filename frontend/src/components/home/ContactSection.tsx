@@ -223,7 +223,7 @@ export default function ContactSection() {
                         name="full_name"
                         type="text"
                         placeholder="Full Name"
-                        className="w-full bg-white border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all"
+                        className="w-full bg-white text-slate-900 placeholder:text-slate-400 caret-slate-900 border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all"
                       />
                     </div>
                     <div className="space-y-2">
@@ -235,7 +235,7 @@ export default function ContactSection() {
                         name="email"
                         type="email"
                         placeholder="email@example.com"
-                        className="w-full bg-white border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all"
+                        className="w-full bg-white text-slate-900 placeholder:text-slate-400 caret-slate-900 border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all"
                       />
                     </div>
                   </div>
@@ -249,7 +249,7 @@ export default function ContactSection() {
                       name="phone"
                       type="tel"
                       placeholder="+94 7x xxx xxxx"
-                      className="w-full bg-white border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all"
+                      className="w-full bg-white text-slate-900 placeholder:text-slate-400 caret-slate-900 border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all"
                     />
                   </div>
 
