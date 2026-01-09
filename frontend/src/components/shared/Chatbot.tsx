@@ -3,12 +3,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot, Sparkles } from 'lucide-react';
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   id: number;
   text: string;
   sender: 'bot' | 'user';
 }
+
+const RAG_API_URL = 'https://nivakaran-newfreerag.hf.space/api/query';
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +22,25 @@ export default function Chatbot() {
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const [showButton, setShowButton] = useState(true);
+  const [deviceId, setDeviceId] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Initialize device fingerprint on client side
+  useEffect(() => {
+    const getDeviceFingerprint = async () => {
+      try {
+        const fp = await FingerprintJS.load();
+        const result = await fp.get();
+        setDeviceId(result.visitorId);
+      } catch (error) {
+        console.error('Failed to get device fingerprint:', error);
+        // Fallback to crypto UUID if fingerprinting fails
+        setDeviceId(crypto.randomUUID());
+      }
+    };
+
+    getDeviceFingerprint();
+  }, []);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -52,24 +74,53 @@ export default function Chatbot() {
     return () => window.removeEventListener('scroll', handleGlobalScroll);
   }, []);
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
+    if (!inputValue.trim() || isTyping) return;
 
-    const userMsg: Message = { id: Date.now(), text: inputValue, sender: 'user' };
+    const userQuestion = inputValue.trim();
+    const userMsg: Message = { id: Date.now(), text: userQuestion, sender: 'user' };
     setMessages(prev => [...prev, userMsg]);
     setInputValue('');
-    
     setIsTyping(true);
-    setTimeout(() => {
-      const botMsg: Message = { 
-        id: Date.now() + 1, 
-        text: "That sounds like a wonderful plan! Our team specializes in that area. Would you like to see our latest packages?", 
-        sender: 'bot' 
+
+    try {
+      const response = await fetch(RAG_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question: userQuestion,
+          top_k: 3,
+          session_id: deviceId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      const botText = data.answer || data.response || "I'm sorry, I couldn't process that request. Please try again.";
+
+      const botMsg: Message = {
+        id: Date.now() + 1,
+        text: botText,
+        sender: 'bot'
       };
       setMessages(prev => [...prev, botMsg]);
+    } catch (error) {
+      console.error('Chatbot API error:', error);
+      const errorMsg: Message = {
+        id: Date.now() + 1,
+        text: "Oops! I'm having trouble connecting right now. Please try again in a moment. 🙏",
+        sender: 'bot'
+      };
+      setMessages(prev => [...prev, errorMsg]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -97,7 +148,7 @@ export default function Chatbot() {
                   </div>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => setIsOpen(false)}
                 className="p-2 hover:bg-white/10 rounded-xl transition-colors flex-shrink-0"
               >
@@ -106,18 +157,23 @@ export default function Chatbot() {
             </div>
 
             {/* Chat Area */}
-            <div 
-              ref={scrollRef} 
+            <div
+              ref={scrollRef}
               className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 bg-slate-50/80 scrollbar-thin scrollbar-thumb-slate-300"
             >
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm font-medium break-words ${
-                    msg.sender === 'user' 
-                      ? 'bg-[#EF476F] text-white rounded-tr-none' 
-                      : 'bg-white text-slate-700 rounded-tl-none border border-slate-100 shadow-sm'
-                  }`}>
-                    {msg.text}
+                  <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm font-medium break-words ${msg.sender === 'user'
+                    ? 'bg-[#EF476F] text-white rounded-tr-none'
+                    : 'bg-white text-slate-700 rounded-tl-none border border-slate-100 shadow-sm'
+                    }`}>
+                    {msg.sender === 'bot' ? (
+                      <div className="prose prose-sm prose-slate max-w-none [&>p]:my-1 [&>ul]:my-2 [&>ol]:my-2 [&>li]:my-0.5 [&>strong]:font-bold">
+                        <ReactMarkdown>{msg.text}</ReactMarkdown>
+                      </div>
+                    ) : (
+                      msg.text
+                    )}
                   </div>
                 </div>
               ))}
@@ -139,10 +195,10 @@ export default function Chatbot() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Type your message..."
-                className="flex-1 bg-slate-100/80 border-none rounded-2xl px-5 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#EF476F] transition-all"
+                className="flex-1 bg-slate-100/80 border-none rounded-2xl px-5 py-3.5 text-sm text-black focus:outline-none focus:ring-2 focus:ring-[#EF476F] transition-all"
               />
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="bg-slate-900 text-white p-3.5 rounded-2xl hover:bg-[#EF476F] transition-colors flex-shrink-0"
               >
                 <Send size={18} />
@@ -169,9 +225,9 @@ export default function Chatbot() {
             >
               Let's <span className="text-[#EF476F] ml-1 font-bold">Talk</span>
               <MessageCircle size={28} className="ml-4 mr-1" />
-              
+
               {!isOpen && (
-                <motion.div 
+                <motion.div
                   animate={{ opacity: [0, 1, 0], scale: [0.8, 1.3, 0.8] }}
                   transition={{ repeat: Infinity, duration: 2.5 }}
                   className="absolute top-3 right-5 text-[#EF476F]"
