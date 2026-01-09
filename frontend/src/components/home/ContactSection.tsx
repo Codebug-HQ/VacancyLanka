@@ -262,7 +262,7 @@ export default function ContactSection() {
                       name="message"
                       rows={4}
                       placeholder="Tell us about your travel plans..."
-                      className="w-full bg-white border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all resize-none"
+                      className="w-full bg-white text-slate-900 placeholder:text-slate-400 caret-slate-900 border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all resize-none"
                     />
                   </div>
 
