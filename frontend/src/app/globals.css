@@ -30,7 +30,7 @@ body {
 
 /* Improve placeholder color for all inputs in modals */
 input::placeholder, textarea::placeholder {
-  color: #94a3b8 !important; /* slate-400 */
+  color: #94a3b8 !important; /* [#00783e] */
   opacity: 1;
 }
 

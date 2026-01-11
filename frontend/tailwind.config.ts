@@ -12,7 +12,7 @@ module.exports = {
       },
       colors: {
         primary: '#1A759F', // A deep blue for primary actions
-        accent: '#EF476F',  // A vibrant pink for highlights
+        accent: '#00783e',  // A vibrant pink for highlights
         dark: '#0A1128',    // Very dark blue for text/backgrounds
         light: '#F8F9FA',   // Off-white
       },

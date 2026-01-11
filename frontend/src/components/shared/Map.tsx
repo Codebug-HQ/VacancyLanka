@@ -15,7 +15,7 @@ export default function Map({ src }: { src: string }) {
         referrerPolicy="no-referrer-when-downgrade"
         title="Office Location"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#00251b]/20 to-transparent pointer-events-none" />
     </div>
   );
 }

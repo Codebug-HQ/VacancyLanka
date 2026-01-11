@@ -104,7 +104,7 @@ Note: This is a system-generated inquiry from the website. Please confirm availa
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
+          className="absolute inset-0 bg-[#00251b]/60 backdrop-blur-md"
         />
         
         <motion.div
@@ -115,7 +115,7 @@ Note: This is a system-generated inquiry from the website. Please confirm availa
           className="relative bg-white w-full max-w-lg rounded-[2.5rem] p-8 md:p-10 shadow-2xl"
         >
           <button onClick={onClose} className="absolute top-6 right-6 p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors">
-            <X className="w-5 h-5 text-slate-900" />
+            <X className="w-5 h-5 text-[#00251b]" />
           </button>
 
           {step === 'form' && (
@@ -125,31 +125,31 @@ Note: This is a system-generated inquiry from the website. Please confirm availa
                   <Car className="w-6 h-6" />
                 </div>
                 <div>
-                  <h4 className="text-2xl font-black text-slate-900 leading-tight">Book Reservation</h4>
+                  <h4 className="text-2xl font-black text-[#00251b] leading-tight">Book Reservation</h4>
                   <p className="text-slate-500 text-sm font-medium">{vehicle.title}</p>
                 </div>
               </div>
 
               <form onSubmit={(e) => { e.preventDefault(); const err = validateForm(); if(!err){ setStep('review'); } else { setError(err); } }} className="space-y-4">
-                <input required name="fullName" type="text" placeholder="Full Name" value={formData.fullName} onChange={handleInputChange} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:border-[#EF476F] outline-none text-slate-900" />
+                <input required name="fullName" type="text" placeholder="Full Name" value={formData.fullName} onChange={handleInputChange} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:border-[#00783e] outline-none text-[#00251b]" />
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase ml-2">Pickup Date</label>
-                    <input required name="startDate" type="date" value={formData.startDate} onChange={handleInputChange} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:border-[#EF476F] outline-none text-slate-900" />
+                    <label className="text-[10px] font-bold text-[#00783e] uppercase ml-2">Pickup Date</label>
+                    <input required name="startDate" type="date" value={formData.startDate} onChange={handleInputChange} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:border-[#00783e] outline-none text-[#00251b]" />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase ml-2">Duration (Days)</label>
-                    <input required name="days" type="number" min="1" value={formData.days} onChange={handleInputChange} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:border-[#EF476F] outline-none text-slate-900" />
+                    <label className="text-[10px] font-bold text-[#00783e] uppercase ml-2">Duration (Days)</label>
+                    <input required name="days" type="number" min="1" value={formData.days} onChange={handleInputChange} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:border-[#00783e] outline-none text-[#00251b]" />
                   </div>
                 </div>
 
-                <input required name="email" type="email" placeholder="Email Address" value={formData.email} onChange={handleInputChange} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:border-[#EF476F] outline-none text-slate-900" />
-                <input required name="phone" type="tel" placeholder="WhatsApp Number (+94...)" value={formData.phone} onChange={handleInputChange} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:border-[#EF476F] outline-none text-slate-900" />
+                <input required name="email" type="email" placeholder="Email Address" value={formData.email} onChange={handleInputChange} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:border-[#00783e] outline-none text-[#00251b]" />
+                <input required name="phone" type="tel" placeholder="WhatsApp Number (+94...)" value={formData.phone} onChange={handleInputChange} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:border-[#00783e] outline-none text-[#00251b]" />
 
                 {error && <div className="flex items-center gap-2 text-red-500 text-xs font-bold bg-red-50 p-3 rounded-xl"><AlertCircle size={16} /> {error}</div>}
 
-                <button type="submit" className="w-full bg-[#EF476F] text-white py-5 rounded-2xl font-black text-lg shadow-lg hover:opacity-90 transition-all">
+                <button type="submit" className="w-full bg-[#00783e] text-white py-5 rounded-2xl font-black text-lg shadow-lg hover:opacity-90 transition-all">
                   Review Details <ChevronRight size={20} className="inline ml-1" />
                 </button>
               </form>
@@ -159,12 +159,12 @@ Note: This is a system-generated inquiry from the website. Please confirm availa
           {step === 'review' && (
             <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
               <div className="mb-6">
-                <span className="text-[#EF476F] font-black text-xs uppercase tracking-widest">Confirmation</span>
-                <h4 className="text-2xl font-black text-slate-900 mt-1">Review Reservation</h4>
+                <span className="text-[#00783e] font-black text-xs uppercase tracking-widest">Confirmation</span>
+                <h4 className="text-2xl font-black text-[#00251b] mt-1">Review Reservation</h4>
               </div>
 
               <div className="bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl p-6 font-mono text-sm text-slate-600 mb-6">
-                <p className="font-bold text-slate-900 mb-2 underline">VEHICLE SUMMARY</p>
+                <p className="font-bold text-[#00251b] mb-2 underline">VEHICLE SUMMARY</p>
                 <p>REF: #{refCode}</p>
                 <p>VEHICLE: {vehicle.title}</p>
                 <p>DATE: {formData.startDate}</p>
@@ -177,7 +177,7 @@ Note: This is a system-generated inquiry from the website. Please confirm availa
                 <button onClick={handleFinalWhatsAppSend} className="w-full bg-emerald-500 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-2 hover:bg-emerald-600 transition-all shadow-lg">
                   Confirm & Open WhatsApp <Send size={20} />
                 </button>
-                <button onClick={() => setStep('form')} className="w-full text-slate-400 font-bold text-sm py-2 hover:text-slate-600 transition-colors">
+                <button onClick={() => setStep('form')} className="w-full text-[#00783e] font-bold text-sm py-2 hover:text-slate-600 transition-colors">
                   Edit details
                 </button>
               </div>
@@ -189,7 +189,7 @@ Note: This is a system-generated inquiry from the website. Please confirm availa
               <div className="w-24 h-24 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
                 <ClipboardCheck size={48} />
               </div>
-              <h4 className="text-3xl font-black text-slate-900 mb-2">Request Sent!</h4>
+              <h4 className="text-3xl font-black text-[#00251b] mb-2">Request Sent!</h4>
               <p className="text-slate-500 px-6">Please finish by clicking "Send" in WhatsApp to notify our team.</p>
             </motion.div>
           )}

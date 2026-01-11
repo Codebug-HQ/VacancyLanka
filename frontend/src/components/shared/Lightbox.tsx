@@ -72,7 +72,7 @@ export default function Lightbox({ destination, onClose }: LightboxProps) {
         {/* Close Button - Smaller on mobile */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 md:top-10 md:right-10 text-white/70 hover:text-[#EF476F] z-[1100] transition-colors"
+          className="absolute top-4 right-4 md:top-10 md:right-10 text-white/70 hover:text-[#00783e] z-[1100] transition-colors"
         >
           <X className="w-8 h-8 md:w-12 md:h-12" />
         </button>
@@ -108,7 +108,7 @@ export default function Lightbox({ destination, onClose }: LightboxProps) {
                 <div
                   key={idx}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
-                    idx === currentPlaceIndex ? 'bg-[#EF476F] w-6' : 'bg-white/40 w-1.5'
+                    idx === currentPlaceIndex ? 'bg-[#00783e] w-6' : 'bg-white/40 w-1.5'
                   }`}
                 />
               ))}
@@ -118,7 +118,7 @@ export default function Lightbox({ destination, onClose }: LightboxProps) {
           {/* Text Panel - Flexible height */}
           <div className="text-white flex flex-col justify-center text-center lg:text-left">
             <motion.span
-              className="w-fit mx-auto lg:mx-0 px-3 py-1 rounded-full border border-[#EF476F] text-[#EF476F] text-[10px] md:text-xs font-bold tracking-widest uppercase mb-3 md:mb-6"
+              className="w-fit mx-auto lg:mx-0 px-3 py-1 rounded-full border border-[#00783e] text-[#00783e] text-[10px] md:text-xs font-bold tracking-widest uppercase mb-3 md:mb-6"
             >
               {destination.name}
             </motion.span>
@@ -160,7 +160,7 @@ export default function Lightbox({ destination, onClose }: LightboxProps) {
                 </button>
                 <button
                   onClick={nextPlace}
-                  className="p-3 md:p-4 rounded-full bg-[#EF476F] hover:bg-[#f45a7f] transition-all shadow-lg"
+                  className="p-3 md:p-4 rounded-full bg-[#00783e] hover:bg-[#f45a7f] transition-all shadow-lg"
                 >
                   <ChevronRight size={20} className="md:w-[28px] md:h-[28px]" />
                 </button>

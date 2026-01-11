@@ -9,29 +9,29 @@ export default function AnimatedHamburger({ isOpen }: { isOpen: boolean }) {
       <motion.span
         animate={
           isOpen
-            ? { rotate: 45, y: 8, backgroundColor: '#EF476F' }
-            : { rotate: 0, y: 0, backgroundColor: '#FFFFFF' }
+            ? { rotate: 45, y: 8, backgroundColor: '#00783e' }
+            : { rotate: 0, y: 0, backgroundColor: '#00251b' }
         }
         transition={{ duration: 0.6, type: 'spring', stiffness: 100, damping: 20 }}
-        className="w-full h-1 block origin-center rounded-full bg-white"
+        className="w-full h-1 block origin-center rounded-full bg-[#00251b]"
       />
 
       {/* Middle line → fades out */}
       <motion.span
         animate={{ opacity: isOpen ? 0 : 1 }}
         transition={{ duration: 0.3 }}
-        className="w-full h-1 block rounded-full bg-white"
+        className="w-full h-1 block rounded-full bg-[#00251b]"
       />
 
       {/* Bottom line → rotates to -45° and moves toward center */}
       <motion.span
         animate={
           isOpen
-            ? { rotate: -45, y: -8, backgroundColor: '#EF476F' }
-            : { rotate: 0, y: 0, backgroundColor: '#FFFFFF' }
+            ? { rotate: -45, y: -8, backgroundColor: '#00783e' }
+            : { rotate: 0, y: 0, backgroundColor: '#00251b' }
         }
         transition={{ duration: 0.6, type: 'spring', stiffness: 100, damping: 20 }}
-        className="w-full h-1 block origin-center rounded-full bg-white"
+        className="w-full h-1 block origin-center rounded-full bg-[#00251b]"
       />
     </div>
   );

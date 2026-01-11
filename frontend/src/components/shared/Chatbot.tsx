@@ -12,7 +12,7 @@ interface Message {
   sender: 'bot' | 'user';
 }
 
-const RAG_API_URL = 'https://nivakaran-newfreerag.hf.space/api/query';
+const RAG_API_URL = process.env.NEXT_PUBLIC_RAG_API_URL;
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -135,16 +135,16 @@ export default function Chatbot() {
             className="w-[92vw] max-w-sm sm:max-w-md md:w-[400px] h-[65vh] md:h-[500px] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-100"
           >
             {/* Header */}
-            <div className="bg-slate-900 px-5 py-5 md:p-6 text-white flex items-center justify-between">
+            <div className="bg-[#00251b] px-5 py-5 md:p-6 text-white flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#EF476F] rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-[#00783e] rounded-xl flex items-center justify-center flex-shrink-0">
                   <Bot size={24} />
                 </div>
                 <div className="min-w-0">
                   <h3 className="font-black text-sm uppercase tracking-widest truncate">Vacay Bot</h3>
                   <div className="flex items-center gap-1.5 mt-1">
                     <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                    <span className="text-[10px] text-slate-400 font-bold tracking-tighter uppercase">Online</span>
+                    <span className="text-[10px] text-[#00783e] font-bold tracking-tighter uppercase">Online</span>
                   </div>
                 </div>
               </div>
@@ -164,7 +164,7 @@ export default function Chatbot() {
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm font-medium break-words ${msg.sender === 'user'
-                    ? 'bg-[#EF476F] text-white rounded-tr-none'
+                    ? 'bg-[#00783e] text-white rounded-tr-none'
                     : 'bg-white text-slate-700 rounded-tl-none border border-slate-100 shadow-sm'
                     }`}>
                     {msg.sender === 'bot' ? (
@@ -180,9 +180,9 @@ export default function Chatbot() {
               {isTyping && (
                 <div className="flex justify-start">
                   <div className="bg-white border border-slate-100 px-4 py-3 rounded-2xl rounded-tl-none flex gap-1.5">
-                    <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" />
-                    <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:0.2s]" />
-                    <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:0.4s]" />
+                    <span className="w-2 h-2 bg-[#00783e] rounded-full animate-bounce" />
+                    <span className="w-2 h-2 bg-[#00783e] rounded-full animate-bounce [animation-delay:0.2s]" />
+                    <span className="w-2 h-2 bg-[#00783e] rounded-full animate-bounce [animation-delay:0.4s]" />
                   </div>
                 </div>
               )}
@@ -195,11 +195,11 @@ export default function Chatbot() {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Type your message..."
-                className="flex-1 bg-slate-100/80 border-none rounded-2xl px-5 py-3.5 text-sm text-black focus:outline-none focus:ring-2 focus:ring-[#EF476F] transition-all"
+                className="flex-1 bg-slate-100/80 border-none rounded-2xl px-5 py-3.5 text-sm text-black focus:outline-none focus:ring-2 focus:ring-[#00783e] transition-all"
               />
               <button
                 type="submit"
-                className="bg-slate-900 text-white p-3.5 rounded-2xl hover:bg-[#EF476F] transition-colors flex-shrink-0"
+                className="bg-[#00251b] text-white p-3.5 rounded-2xl hover:bg-[#00783e] transition-colors flex-shrink-0"
               >
                 <Send size={18} />
               </button>
@@ -221,16 +221,16 @@ export default function Chatbot() {
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(!isOpen)}
-              className="py-4 px-7 bg-slate-900 rounded-full flex items-center justify-center text-white shadow-2xl relative overflow-hidden"
+              className="py-4 px-7 bg-[#00251b] rounded-full flex items-center justify-center text-white shadow-2xl relative overflow-hidden"
             >
-              Let's <span className="text-[#EF476F] ml-1 font-bold">Talk</span>
+              Let's <span className="text-[#00783e] ml-1 font-bold">Talk</span>
               <MessageCircle size={28} className="ml-4 mr-1" />
 
               {!isOpen && (
                 <motion.div
                   animate={{ opacity: [0, 1, 0], scale: [0.8, 1.3, 0.8] }}
                   transition={{ repeat: Infinity, duration: 2.5 }}
-                  className="absolute top-3 right-5 text-[#EF476F]"
+                  className="absolute top-3 right-5 text-[#00783e]"
                 >
                   <Sparkles size={16} fill="currentColor" />
                 </motion.div>

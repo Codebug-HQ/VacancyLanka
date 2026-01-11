@@ -105,16 +105,16 @@ export default function VehiclesSection() {
         <motion.span
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          className="text-[#EF476F] font-bold tracking-[0.3em] uppercase text-sm"
+          className="text-[#00783e] font-bold tracking-[0.3em] uppercase text-sm"
         >
           Premium Fleet
         </motion.span>
         <motion.h2
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-6xl font-black text-slate-900 mt-4 tracking-tighter"
+          className="text-4xl md:text-6xl font-black text-[#00251b] mt-4 tracking-tighter"
         >
-          Explore In <span className="text-slate-400">Style</span>
+          Explore In <span className="text-[#00783e]">Style</span>
         </motion.h2>
       </div>
 
@@ -139,9 +139,9 @@ export default function VehiclesSection() {
         />
         
         {/* Price Tag - Modern Floating Style */}
-        <div className="absolute top-4 right-4 bg-slate-900/90 backdrop-blur-md text-white px-4 py-2 rounded-2xl shadow-lg border border-white/10">
+        <div className="absolute top-4 right-4 bg-[#00251b]/90 backdrop-blur-md text-white px-4 py-2 rounded-2xl shadow-lg border border-white/10">
           <div className="flex flex-col items-end leading-none">
-            <span className="text-[10px] uppercase tracking-tighter text-slate-400 mb-1 font-bold">Daily</span>
+            <span className="text-[10px] uppercase tracking-tighter text-[#00ea78]/80 mb-1 font-bold">Daily</span>
             <p className="text-lg font-black">
               LKR {car.vehicleDetails.pricePerDay}
             </p>
@@ -149,39 +149,39 @@ export default function VehiclesSection() {
         </div>
 
         {/* Subtle Gradient bottom-up for readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#00251b]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
 
       {/* Content Area */}
       <div className="p-6 md:p-8 flex flex-col flex-grow bg-white">
         {/* Title & Badge */}
         <div className="mb-6">
-          <h3 className="text-2xl font-black text-slate-900 group-hover:text-[#EF476F] transition-colors duration-300">
+          <h3 className="text-2xl font-black text-[#00251b] group-hover:text-[#00783e] transition-colors duration-300">
             {car.title}
           </h3>
         </div>
 
         {/* Specs - Visual Icon Grid */}
         <div className="grid grid-cols-3 gap-2 md:gap-4 mb-8">
-          <div className="bg-slate-50 rounded-2xl p-3 flex flex-col items-center justify-center gap-1 border border-slate-100 group-hover:bg-white group-hover:border-[#EF476F]/20 transition-all">
-            <Gauge className="w-4 h-4 text-[#EF476F]" />
+          <div className="bg-slate-50 rounded-2xl p-3 flex flex-col items-center justify-center gap-1 border border-slate-100 group-hover:bg-white group-hover:border-[#00783e]/20 transition-all">
+            <Gauge className="w-4 h-4 text-[#00783e]" />
 <span className="text-[11px] font-bold text-slate-700">
   {car.vehicleDetails.dailyKmLimit}{!isNaN(Number(car.vehicleDetails.dailyKmLimit)) ? ' km' : ''}
 </span>          
 </div>
-          <div className="bg-slate-50 rounded-2xl p-3 flex flex-col items-center justify-center gap-1 border border-slate-100 group-hover:bg-white group-hover:border-[#EF476F]/20 transition-all">
-            <Users className="w-4 h-4 text-[#EF476F]" />
+          <div className="bg-slate-50 rounded-2xl p-3 flex flex-col items-center justify-center gap-1 border border-slate-100 group-hover:bg-white group-hover:border-[#00783e]/20 transition-all">
+            <Users className="w-4 h-4 text-[#00783e]" />
             <span className="text-[11px] font-bold text-slate-700">{car.vehicleDetails.passengers} Seats</span>
           </div>
-          <div className="bg-slate-50 rounded-2xl p-3 flex flex-col items-center justify-center gap-1 border border-slate-100 group-hover:bg-white group-hover:border-[#EF476F]/20 transition-all">
-            <Fuel className="w-4 h-4 text-[#EF476F]" />
+          <div className="bg-slate-50 rounded-2xl p-3 flex flex-col items-center justify-center gap-1 border border-slate-100 group-hover:bg-white group-hover:border-[#00783e]/20 transition-all">
+            <Fuel className="w-4 h-4 text-[#00783e]" />
             <span className="text-[11px] font-bold text-slate-700">{cleanFuelType(car.vehicleDetails.fuelType)}</span>
           </div>
         </div>
 
         {/* Documents Section with subtle styling */}
         <div className="mb-8 px-2">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-extrabold mb-4">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[#00783e] font-extrabold mb-4">
             Requirement Check
           </p>
           <div
@@ -195,14 +195,14 @@ export default function VehiclesSection() {
         {/* Button - Modern Large CTA */}
         <button
           onClick={() => setSelectedVehicle(car)}
-          className="mt-auto w-full relative overflow-hidden bg-slate-900 text-white py-4 rounded-2xl font-bold transition-all duration-300 active:scale-95 flex items-center justify-center gap-3 shadow-xl shadow-slate-200"
+          className="mt-auto w-full relative overflow-hidden bg-[#00251b] text-white py-4 rounded-2xl font-bold transition-all duration-300 active:scale-95 flex items-center justify-center gap-3 shadow-xl shadow-slate-200"
         >
           <span className="relative z-10 flex items-center gap-2">
             Reserve Vehicle
             <Calendar className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </span>
           {/* Hover Effect Layer */}
-          <div className="absolute inset-0 bg-[#EF476F] translate-y-[101%] group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+          <div className="absolute inset-0 bg-[#00783e] translate-y-[101%] group-hover:translate-y-0 transition-transform duration-300 ease-out" />
         </button>
       </div>
     </motion.div>

@@ -91,7 +91,7 @@ export default function ActivitiesGrid() {
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-[#EF476F] font-bold tracking-[0.3em] uppercase text-sm block"
+          className="text-[#00783e] font-bold tracking-[0.3em] uppercase text-sm block"
         >
           Adventure Awaits
         </motion.span>
@@ -100,9 +100,9 @@ export default function ActivitiesGrid() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="text-4xl md:text-6xl font-black text-slate-900 mt-4 tracking-tighter"
+          className="text-4xl md:text-6xl font-black text-[#00251b] mt-4 tracking-tighter"
         >
-          Push Your <span className="text-slate-400">Limits</span>
+          Push Your <span className="text-[#00783e]">Limits</span>
         </motion.h2>
       </div>
 
@@ -160,7 +160,7 @@ export default function ActivitiesGrid() {
                   {details.description}
                 </p>
 
-                <div className="w-12 h-1 bg-white/30 rounded-full mt-6 group-hover:w-full group-hover:bg-[#EF476F] transition-all duration-500" />
+                <div className="w-12 h-1 bg-white/30 rounded-full mt-6 group-hover:w-full group-hover:bg-[#00783e] transition-all duration-500" />
               </div>
 
               <div className="absolute inset-0 border-[1px] border-white/20 rounded-[2.5rem] pointer-events-none z-20" />

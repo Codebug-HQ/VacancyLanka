@@ -50,12 +50,12 @@ export default function SriLankaMap({ hoveredDistrict, onDistrictHover }: SriLan
             <motion.path
               key={district.id}
               d={district.d}
-              fill={hoveredDistrict === district.id ? '#EF476F' : '#0f172b'}
+              fill={hoveredDistrict === district.id ? '#00783e' : '#00251b'}
               stroke="#fff"
               strokeWidth="1.45"
               onMouseEnter={() => onDistrictHover(district.id)}
               onMouseLeave={() => onDistrictHover(null)}
-              // REMOVED: whileHover={{ fill: '#EF476F' }}
+              // REMOVED: whileHover={{ fill: '#00783e' }}
               style={{ cursor: 'pointer' }}
               transition={{ duration: 0.3 }}
               whileHover={{ scale: 1.02 }} // Optional: subtle zoom instead of color change

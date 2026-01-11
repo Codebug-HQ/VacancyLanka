@@ -13,11 +13,11 @@ export default function Icon({ type, isActive, className }: IconProps) {
     return (
       <div className={`relative w-6 h-6 flex items-center justify-center flex-shrink-0 ${className}`}>
         <motion.div
-          className="absolute w-5 h-[2px] bg-[#EF476F] rounded-full"
+          className="absolute w-5 h-[2px] bg-[#00783e] rounded-full"
           animate={{ rotate: isActive ? 180 : 0 }}
         />
         <motion.div
-          className="absolute w-[2px] h-5 bg-[#EF476F] rounded-full"
+          className="absolute w-[2px] h-5 bg-[#00783e] rounded-full"
           animate={{ 
             rotate: isActive ? 90 : 0,
             opacity: isActive ? 0 : 1,
@@ -42,7 +42,7 @@ export default function Icon({ type, isActive, className }: IconProps) {
         {/* Left Half of Chevron */}
         <motion.span
           animate={{ 
-            backgroundColor: isActive ? "#EF476F" : "#FFFFFF",
+            backgroundColor: isActive ? "#00783e" : "#00251b",
             rotate: 135,
             x: 2.5
           }}
@@ -51,7 +51,7 @@ export default function Icon({ type, isActive, className }: IconProps) {
         {/* Right Half of Chevron */}
         <motion.span
           animate={{ 
-            backgroundColor: isActive ? "#EF476F" : "#FFFFFF",
+            backgroundColor: isActive ? "#00783e" : "#00251b",
             rotate: -135,
             x: -2.5
           }}
@@ -65,7 +65,7 @@ export default function Icon({ type, isActive, className }: IconProps) {
         animate={{ 
           scale: isActive ? 1 : 0.8,
           opacity: isActive ? 1 : 0,
-          borderColor: "#EF476F"
+          borderColor: "#00783e"
         }}
         className="absolute inset-0 border-2 rounded-full"
         transition={{ duration: 0.3, ease: "easeOut" }}
@@ -81,7 +81,7 @@ export default function Icon({ type, isActive, className }: IconProps) {
             duration: 1.5, 
             ease: "circOut" 
           }}
-          className="absolute inset-0 border border-[#EF476F] rounded-full"
+          className="absolute inset-0 border border-[#00783e] rounded-full"
         />
       )}
     </div>

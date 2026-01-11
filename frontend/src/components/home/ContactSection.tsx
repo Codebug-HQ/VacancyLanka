@@ -129,16 +129,16 @@ export default function ContactSection() {
         <motion.span
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          className="text-[#EF476F] font-bold tracking-[0.3em] uppercase text-sm"
+          className="text-[#00783e] font-bold tracking-[0.3em] uppercase text-sm"
         >
           Connect With Us
         </motion.span>
         <motion.h2
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-6xl font-black text-slate-900 mt-4 tracking-tighter"
+          className="text-4xl md:text-6xl font-black text-[#00251b] mt-4 tracking-tighter"
         >
-          Start Your <span className="text-slate-400">Adventure</span>
+          Start Your <span className="text-[#00783e]">Adventure</span>
         </motion.h2>
       </div>
 
@@ -147,12 +147,12 @@ export default function ContactSection() {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            className="bg-slate-900 rounded-[2.5rem] p-10 text-white relative overflow-hidden"
+            className="bg-[#00251b] rounded-[2.5rem] p-10 text-white relative overflow-hidden"
           >
             <h3 className="text-2xl font-black mb-8 tracking-tight">Direct Contact</h3>
             <div className="space-y-6">
               <div className="flex gap-4">
-                <div className="bg-white/10 p-3 rounded-2xl h-fit text-[#EF476F]">
+                <div className="bg-white/10 p-3 rounded-2xl h-fit text-[#00783e]">
                   <MapPin size={20} />
                 </div>
                 <div>
@@ -164,7 +164,7 @@ export default function ContactSection() {
               </div>
 
               <div className="flex gap-4">
-                <div className="bg-white/10 p-3 rounded-2xl h-fit text-[#EF476F]">
+                <div className="bg-white/10 p-3 rounded-2xl h-fit text-[#00783e]">
                   <User size={20} />
                 </div>
                 <div>
@@ -177,7 +177,7 @@ export default function ContactSection() {
               </div>
 
               <div className="flex gap-4">
-                <div className="bg-white/10 p-3 rounded-2xl h-fit text-[#EF476F]">
+                <div className="bg-white/10 p-3 rounded-2xl h-fit text-[#00783e]">
                   <Phone size={20} />
                 </div>
                 <div>
@@ -215,7 +215,7 @@ export default function ContactSection() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[#00783e] ml-2">
                         Your Name
                       </label>
                       <input
@@ -223,11 +223,11 @@ export default function ContactSection() {
                         name="full_name"
                         type="text"
                         placeholder="Full Name"
-                        className="w-full bg-white text-slate-900 placeholder:text-slate-400 caret-slate-900 border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all"
+                        className="w-full bg-white text-[#00251b] placeholder:text-[#00783e] caret-[#00251b] border-none rounded-2xl p-4 focus:ring-2 ring-[#00783e] outline-none shadow-sm font-medium transition-all"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-[#00783e] ml-2">
                         Email
                       </label>
                       <input
@@ -235,13 +235,13 @@ export default function ContactSection() {
                         name="email"
                         type="email"
                         placeholder="email@example.com"
-                        className="w-full bg-white text-slate-900 placeholder:text-slate-400 caret-slate-900 border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all"
+                        className="w-full bg-white text-[#00251b] placeholder:text-[#00783e] caret-[#00251b] border-none rounded-2xl p-4 focus:ring-2 ring-[#00783e] outline-none shadow-sm font-medium transition-all"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#00783e] ml-2">
                       Phone Number
                     </label>
                     <input
@@ -249,12 +249,12 @@ export default function ContactSection() {
                       name="phone"
                       type="tel"
                       placeholder="+94 7x xxx xxxx"
-                      className="w-full bg-white text-slate-900 placeholder:text-slate-400 caret-slate-900 border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all"
+                      className="w-full bg-white text-[#00251b] placeholder:text-[#00783e] caret-[#00251b] border-none rounded-2xl p-4 focus:ring-2 ring-[#00783e] outline-none shadow-sm font-medium transition-all"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-[#00783e] ml-2">
                       How can we help?
                     </label>
                     <textarea
@@ -262,13 +262,13 @@ export default function ContactSection() {
                       name="message"
                       rows={4}
                       placeholder="Tell us about your travel plans..."
-                      className="w-full bg-white text-slate-900 placeholder:text-slate-400 caret-slate-900 border-none rounded-2xl p-4 focus:ring-2 ring-[#EF476F] outline-none shadow-sm font-medium transition-all resize-none"
+                      className="w-full bg-white text-[#00251b] placeholder:text-[#00783e] caret-[#00251b] border-none rounded-2xl p-4 focus:ring-2 ring-[#00783e] outline-none shadow-sm font-medium transition-all resize-none"
                     />
                   </div>
 
                   <button
                     disabled={formState === 'sending'}
-                    className="cursor-pointer w-full bg-slate-900 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 hover:bg-[#EF476F] transition-all disabled:opacity-50 group"
+                    className="cursor-pointer w-full bg-[#00251b] text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 hover:bg-[#00783e] transition-all disabled:opacity-50 group"
                   >
                     {formState === 'sending' ? 'Sending...' : 'Send Enquiry'}
                     <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
@@ -284,13 +284,13 @@ export default function ContactSection() {
                   <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-6">
                     <CheckCircle2 size={40} />
                   </div>
-                  <h3 className="text-3xl font-black text-slate-900 mb-2">Message Received!</h3>
+                  <h3 className="text-3xl font-black text-[#00251b] mb-2">Message Received!</h3>
                   <p className="text-slate-500 font-medium max-w-sm">
                     Our travel experts will get back to you within 24 hours.
                   </p>
                   <button
                     onClick={() => setFormState('idle')}
-                    className="cursor-pointer mt-8 text-sm font-bold text-[#EF476F] hover:underline"
+                    className="cursor-pointer mt-8 text-sm font-bold text-[#00783e] hover:underline"
                   >
                     Send another message
                   </button>

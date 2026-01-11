@@ -174,7 +174,7 @@ export default function InteractiveHero() {
                 >
                   <a
                     href="/#packages"
-                    className="cursor-pointer group relative px-8 py-4 bg-white text-black font-bold rounded-sm overflow-hidden transition-all hover:bg-[#0f172b] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#0f172b]"
+                    className="cursor-pointer group relative px-8 py-4 bg-white text-black font-bold rounded-sm overflow-hidden transition-all hover:bg-[#00251b] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#00251b]"
                   >
                     <span className="relative z-10">BOOK EXPERIENCE</span>
                   </a>

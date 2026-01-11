@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { request } from 'graphql-request';
 import Icon from '../ui/Icon';
 import AnimatedHamburger from '../ui/AnimatedHamburger';
-// Removed useLoading import to stop global interruptions
 import { 
   Instagram, 
   Facebook, 
@@ -58,31 +57,24 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
   const [isLocalLoading, setIsLocalLoading] = useState(false);
 
   useEffect(() => {
-    // Only fetch if menu is opened and we don't have data yet
     if (!isOpen || (packages.length > 0 && activities.length > 0 && ownerData)) return;
 
     async function fetchMenuData() {
       try {
-        setIsLocalLoading(true); // Only local state, no global loading context
-        
+        setIsLocalLoading(true);
         const proxyUrl = typeof window !== 'undefined' 
           ? `${window.location.origin}/api/graphql/proxy` 
           : '/api/graphql/proxy';
-
         const data: any = await request(proxyUrl, GET_NAVIGATION);
-
         setOwnerData(data.ownerInfo);
-
         const combinedPackages = [
           ...(data.packages?.nodes || []),
           ...(data.itineraries?.nodes || []),
         ].map((node: any) => ({ title: node.title, href: '#packages' }));
-
         const mappedActivities = (data.activities?.nodes || []).map((node: any) => ({
           title: node.title,
           href: '#activities',
         }));
-
         setPackages(combinedPackages);
         setActivities(mappedActivities);
       } catch (err) {
@@ -91,7 +83,6 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
         setIsLocalLoading(false);
       }
     }
-
     fetchMenuData();
   }, [isOpen, packages.length, activities.length, ownerData]);
 
@@ -99,10 +90,11 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
     setOpenSection(openSection === section ? null : section);
   };
 
-  const menuLinkStyle = "text-white text-3xl font-bold hover:text-[#EF476F] transition-colors block tracking-tighter w-full text-left py-4";
-  const accordionTitleStyle = "text-white text-3xl font-bold hover:text-[#EF476F] transition-colors flex items-center justify-between py-4 cursor-pointer";
-  const subLinkStyle = "text-zinc-400 text-lg py-2 hover:text-[#EF476F] transition-colors block pl-8 border-l border-white/5 ml-2 my-1";
-  const socialIconStyle = "p-3 bg-white/5 rounded-xl text-zinc-400 hover:text-[#EF476F] hover:bg-white/10 transition-all flex items-center justify-center";
+  // UPDATED THEME STYLES
+  const menuLinkStyle = "text-[#00251b] text-3xl font-bold hover:text-[#00773f] transition-colors block tracking-tighter w-full text-left py-4";
+  const accordionTitleStyle = "text-[#00251b] text-3xl font-bold hover:text-[#00773f] transition-colors flex items-center justify-between py-4 cursor-pointer";
+  const subLinkStyle = "text-zinc-500 text-lg py-2 hover:text-[#00773f] transition-colors block pl-8 border-l border-[#00773f]/20 ml-2 my-1";
+  const socialIconStyle = "p-3 bg-[#00251b]/5 rounded-xl text-[#00251b] hover:text-white hover:bg-[#00773f] transition-all flex items-center justify-center";
 
   return (
     <AnimatePresence>
@@ -113,7 +105,7 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 bg-black/90 backdrop-blur-md z-[140] lg:hidden"
+            className="fixed inset-0 bg-[#00251b]/40 backdrop-blur-sm z-[140] lg:hidden"
           />
 
           <motion.div
@@ -121,15 +113,19 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed inset-y-0 right-0 w-[85%] sm:w-[65%] bg-[#0f172b] z-[150] shadow-2xl lg:hidden border-l border-white/5 overflow-y-auto"
+            className="fixed inset-y-0 right-0 w-[85%] sm:w-[65%] bg-white z-[150] shadow-2xl lg:hidden border-l border-[#00251b]/10 overflow-y-auto"
           >
-            <div className="sticky top-0 bg-[#0f172b]/80 backdrop-blur-lg px-8 py-6 flex justify-between items-center border-b border-white/5 z-[160]">
-              <span className="text-white font-black tracking-tighter text-xl">
-                VACAY<span className="text-[#EF476F]">LANKA</span>
+            <div className="sticky top-0 bg-white/80 backdrop-blur-lg px-8 py-6 flex justify-between items-center border-b border-[#00251b]/5 z-[160]">
+              <span className="text-[#00251b] font-black tracking-tighter text-xl">
+                <motion.img 
+                  src="/images/logo-vacay.png" 
+                  alt="VacayLanka" 
+                  className="h-10 w-auto" 
+                />
               </span>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-3 bg-white/5 rounded-full hover:bg-[#EF476F]/20 transition-colors"
+                className="p-3 bg-[#00251b]/5 rounded-full hover:bg-[#00773f]/10 transition-colors"
               >
                 <AnimatedHamburger isOpen={isOpen} />
               </button>
@@ -142,8 +138,8 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                 {/* Packages Accordion */}
                 <div onClick={() => toggleSection('packages')} className={accordionTitleStyle}>
                   Packages
-                  <motion.div animate={{ rotate: openSection === 'packages' ? 180 : 0, color: openSection === 'packages' ? '#EF476F' : '#ffffff' }}>
-                  <ChevronDown className="w-6 h-6" />                  
+                  <motion.div animate={{ rotate: openSection === 'packages' ? 180 : 0, color: openSection === 'packages' ? '#00773f' : '#00251b' }}>
+                    <ChevronDown className="w-6 h-6" />                  
                   </motion.div>
                 </div>
                 
@@ -168,9 +164,9 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                 {/* Activities Accordion */}
                 <div onClick={() => toggleSection('activities')} className={accordionTitleStyle}>
                   Activities
-                  <motion.div animate={{ rotate: openSection === 'activities' ? 180 : 0, color: openSection === 'activities' ? '#EF476F' : '#ffffff' }}>
-<ChevronDown className="w-6 h-6" />                  
-</motion.div>
+                  <motion.div animate={{ rotate: openSection === 'activities' ? 180 : 0, color: openSection === 'activities' ? '#00773f' : '#00251b' }}>
+                    <ChevronDown className="w-6 h-6" />                  
+                  </motion.div>
                 </div>
 
                 <AnimatePresence>
@@ -196,21 +192,19 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                 <Link href="#contact" onClick={() => setIsOpen(false)} className={menuLinkStyle}>Contact Us</Link>
               </nav>
 
-              {/* Dynamic Footer Section */}
               <div className="mt-auto pt-12">
-                <div className="pt-8 border-t border-white/5">
-                  <p className="text-[#EF476F] text-[10px] uppercase tracking-[0.4em] font-black mb-4">Inquiries</p>
+                <div className="pt-8 border-t border-[#00251b]/10">
+                  <p className="text-[#00773f] text-[10px] uppercase tracking-[0.4em] font-black mb-4">Inquiries</p>
                   
                   {ownerData?.email ? (
                     <a 
                       href={`mailto:${ownerData.email}`} 
-                      className="text-white text-xl font-medium block mb-8 hover:text-[#EF476F] transition-colors break-all"
+                      className="text-[#00251b] text-xl font-medium block mb-8 hover:text-[#00773f] transition-colors break-all"
                     >
                       {ownerData.email}
                     </a>
                   ) : (
-                    // Optional placeholder or subtle loading pulse
-                    <div className="h-7 w-48 bg-white/5 animate-pulse rounded mb-8" />
+                    <div className="h-7 w-48 bg-[#00251b]/5 animate-pulse rounded mb-8" />
                   )}
 
                   <div className="flex flex-wrap gap-3">
@@ -248,7 +242,7 @@ export default function MobileMenu({ isOpen, setIsOpen }: MobileMenuProps) {
                       <a 
                         href={ownerData.map_embedded_link} 
                         target="_blank" 
-                        className="p-3 bg-[#EF476F]/10 rounded-xl text-[#EF476F] hover:bg-[#EF476F] hover:text-white transition-all flex items-center justify-center"
+                        className="p-3 bg-[#00773f]/10 text-[#00773f] rounded-xl hover:bg-[#00ff86] hover:text-[#00251b] transition-all flex items-center justify-center"
                       >
                         <MapPin size={20} />
                       </a>

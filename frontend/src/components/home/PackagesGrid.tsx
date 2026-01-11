@@ -122,11 +122,11 @@ export default function PackagesGrid() {
     <div className="max-w-7xl mx-auto px-4">
       {/* Header */}
       <div className="text-center mb-16">
-        <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-[#EF476F] font-bold tracking-[0.3em] uppercase text-sm">
+        <motion.span initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-[#00783e] font-bold tracking-[0.3em] uppercase text-sm">
           Curated Journeys
         </motion.span>
-        <motion.h2 initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} className="text-4xl md:text-6xl font-black text-slate-900 mt-4 tracking-tighter">
-          Find Your Preferred <span className="text-slate-400">Experience</span>
+        <motion.h2 initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} className="text-4xl md:text-6xl font-black text-[#00251b] mt-4 tracking-tighter">
+          Find Your Preferred <span className="text-[#00783e]">Experience</span>
         </motion.h2>
       </div>
 
@@ -168,7 +168,7 @@ export default function PackagesGrid() {
                   </div>
                   <button
                     onClick={() => openBooking({ title: pkg.title, price: details.price })}
-                    className="bg-white text-slate-900 px-5 py-3 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-[#EF476F] hover:text-white transition-all active:scale-95"
+                    className="bg-white text-[#00251b] px-5 py-3 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-[#00783e] hover:text-white transition-all active:scale-95"
                   >
                     Book Now <ChevronRight className="w-4 h-4" />
                   </button>
@@ -182,8 +182,8 @@ export default function PackagesGrid() {
       {/* Featured Itineraries */}
       <div className="border-t border-gray-100 pt-20">
         <div className="flex flex-col items-center mb-12">
-          <Tag className="text-[#EF476F] w-8 h-8 mb-4" />
-          <h3 className="text-3xl md:text-5xl font-black text-slate-900 text-center">Featured Itineraries</h3>
+          <Tag className="text-[#00783e] w-8 h-8 mb-4" />
+          <h3 className="text-3xl md:text-5xl font-black text-[#00251b] text-center">Featured Itineraries</h3>
           <p className="text-slate-500 mt-4 text-center max-w-2xl">Expertly crafted routes for a seamless island adventure.</p>
         </div>
 
@@ -223,22 +223,22 @@ function ItineraryCard({ title, duration, tag, price, description, daysList, inc
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
         <div className="flex-1">
-          <span className="bg-[#EF476F]/10 text-[#EF476F] px-3 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider">
+          <span className="bg-[#00783e]/10 text-[#00783e] px-3 py-1 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-wider">
             {tag || 'Featured'}
           </span>
-          <h4 className="text-xl md:text-2xl font-black mt-2 text-slate-900 leading-tight">
+          <h4 className="text-xl md:text-2xl font-black mt-2 text-[#00251b] leading-tight">
             {title}
           </h4>
         </div>
         <div className="flex items-center text-gray-500 text-xs md:text-sm font-medium bg-slate-50 px-3 py-1.5 rounded-xl shrink-0">
-          <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1.5 text-[#EF476F]" /> 
+          <Clock className="w-3.5 h-3.5 md:w-4 md:h-4 mr-1.5 text-[#00783e]" /> 
           {duration}
         </div>
       </div>
 
       {/* Description */}
       <div 
-        className="text-gray-600 mb-6 md:mb-8 leading-relaxed italic border-l-4 border-[#EF476F]/20 pl-4 prose-sm text-sm md:text-base" 
+        className="text-gray-600 mb-6 md:mb-8 leading-relaxed italic border-l-4 border-[#00783e]/20 pl-4 prose-sm text-sm md:text-base" 
         dangerouslySetInnerHTML={{ __html: description }} 
       />
 
@@ -273,7 +273,7 @@ function ItineraryCard({ title, duration, tag, price, description, daysList, inc
             <Info className="w-3 h-3 mr-1.5" /> Not Included
           </p>
           <div 
-            className="prose prose-xs text-slate-400 text-xs md:text-sm prose-li:my-0.5 prose-ul:pl-4" 
+            className="prose prose-xs text-[#00783e] text-xs md:text-sm prose-li:my-0.5 prose-ul:pl-4" 
             dangerouslySetInnerHTML={{ __html: notIncludesList }} 
           />
         </div>
@@ -284,13 +284,13 @@ function ItineraryCard({ title, duration, tag, price, description, daysList, inc
         <div className="text-center sm:text-left">
           <span className="text-[10px] md:text-xs text-gray-400 italic">Starting from</span>
           <div className="flex items-baseline justify-center sm:justify-start gap-1">
-            <span className="text-xs font-bold text-slate-900">LKR</span>
-            <span className="text-2xl md:text-3xl font-black text-slate-900">{price || 'Custom'}</span>
+            <span className="text-xs font-bold text-[#00251b]">LKR</span>
+            <span className="text-2xl md:text-3xl font-black text-[#00251b]">{price || 'Custom'}</span>
           </div>
         </div>
         <button 
           onClick={onBook} 
-          className="w-full sm:w-auto bg-slate-900 text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center hover:bg-[#EF476F] active:scale-95 transition-all shadow-lg shadow-slate-200"
+          className="w-full sm:w-auto bg-[#00251b] text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center hover:bg-[#00783e] active:scale-95 transition-all shadow-lg shadow-slate-200"
         >
           Book Trip <ChevronRight className="w-5 h-5 ml-2" />
         </button>

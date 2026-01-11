@@ -156,10 +156,10 @@ export default function DestinationGrid() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="lg:border-l-8 border-[#EF476F] lg:pl-12"
+            className="lg:border-l-8 border-[#00783e] lg:pl-12"
           >
-            <h2 className="text-4xl md:text-6xl font-black text-slate-900 mb-8 tracking-tighter leading-[0.9]">
-              Crafting Unforgettable Journeys in <span className="text-[#EF476F]">Paradise</span>
+            <h2 className="text-4xl md:text-6xl font-black text-[#00251b] mb-8 tracking-tighter leading-[0.9]">
+              Crafting Unforgettable Journeys in <span className="text-[#00783e]">Paradise</span>
             </h2>
             <p className="text-lg text-gray-500 max-w-xl leading-relaxed font-medium">
               At VacayLanka, we believe travel is more than just visiting places — it’s about creating stories you’ll carry forever.
