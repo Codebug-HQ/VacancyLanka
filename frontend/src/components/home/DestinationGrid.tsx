@@ -7,7 +7,29 @@ import { request } from 'graphql-request';
 import SriLankaMap from '../ui/SriLankaMap';
 import Lightbox from '../shared/Lightbox';
 import { useLoading } from '@/context/LoadingContext';
-import { getProxiedImageUrl } from '@/lib/image-proxy';
+
+// ── Safe proxy function (prevents double-proxying) ──────────────────────────
+export function getProxiedImageUrl(url: string): string {
+  if (!url) return '/placeholder.jpg'; // fallback
+
+  // Already proxied? Return as is (very important!)
+  if (url.includes('/api/image-proxy?url=')) {
+    return url;
+  }
+
+  // Proxy only external / wordpress hosted images
+  if (
+    url.includes('vacaylanka.atwebpages.com') ||
+    url.includes('localhost') ||
+    url.includes('127.0.0.1') ||
+    url.startsWith('http') // ← optional: proxy everything external
+  ) {
+    return `/api/image-proxy?url=${encodeURIComponent(url)}`;
+  }
+
+  // Trusted / relative / already good → no proxy
+  return url;
+}
 
 const GET_DESTINATIONS = `
   query GetDestinations {
@@ -55,23 +77,21 @@ const GET_DESTINATIONS = `
   }
 `;
 
-const getProxyEndpoint = () => {
-  if (typeof window !== 'undefined') {
-    return window.location.origin + '/api/graphql/proxy';
-  }
-  return '/api/graphql/proxy';
-};
+const getProxyEndpoint = () =>
+  typeof window !== 'undefined'
+    ? window.location.origin + '/api/graphql/proxy'
+    : '/api/graphql/proxy';
 
 interface Place {
   title: string;
   description: string;
-  image: string;
+  image: string; // already proxied URL
 }
 
 interface Destination {
   name: string;
   desc: string;
-  image: string;
+  image: string; // already proxied
   places: Place[];
   districtOrder: number;
 }
@@ -86,19 +106,20 @@ export default function DestinationGrid() {
 
   useEffect(() => {
     async function fetchDestinations() {
+      startLoading();
       try {
-        startLoading();
         const proxyUrl = getProxyEndpoint();
         const data: any = await request(proxyUrl, GET_DESTINATIONS);
-        
-        const formatted: Destination[] = (data.destinations?.nodes || [])
+
+        const rawDestinations = data?.destinations?.nodes || [];
+
+        const formatted = rawDestinations
           .map((node: any) => {
             const details = node.destinationsDetails || {};
-            // Typed array to prevent the "implicitly has any type" error
+
             const places: Place[] = [];
-            
-            // Helper to extract spot data exactly like your other components
-            const extractSpot = (spot: any) => {
+
+            const addSpot = (spot: any) => {
               if (spot?.title) {
                 places.push({
                   title: spot.title,
@@ -108,40 +129,42 @@ export default function DestinationGrid() {
               }
             };
 
-            extractSpot(details.spot1);
-            extractSpot(details.spot2);
-            extractSpot(details.spot3);
+            addSpot(details.spot1);
+            addSpot(details.spot2);
+            addSpot(details.spot3);
 
             return {
-              name: node.title,
+              name: node.title || 'Unnamed Destination',
               desc: details.shortDescription || 'Discover this beautiful destination',
               image: getProxiedImageUrl(node.featuredImage?.node?.sourceUrl || ''),
               places,
-              districtOrder: details.districtOrder ?? 999,
+              districtOrder: Number(details.districtOrder) || 999,
             };
           })
           .sort((a: Destination, b: Destination) => a.districtOrder - b.districtOrder);
 
         setDestinations(formatted);
       } catch (err) {
-        console.error('Failed to load destinations:', err);
+        console.error('Failed to fetch destinations:', err);
       } finally {
         finishLoading();
       }
     }
+
     fetchDestinations();
   }, [startLoading, finishLoading]);
 
   const nextPlace = () => {
-    if (!selectedDest) return;
+    if (!selectedDest?.places?.length) return;
     setCurrentPlaceIndex((prev) => (prev + 1) % selectedDest.places.length);
   };
 
   const prevPlace = () => {
-    if (!selectedDest) return;
+    if (!selectedDest?.places?.length) return;
     setCurrentPlaceIndex((prev) => (prev - 1 + selectedDest.places.length) % selectedDest.places.length);
   };
 
+  // Split into rows of 5 for desktop grid
   const rows: Destination[][] = [];
   for (let i = 0; i < destinations.length; i += 5) {
     rows.push(destinations.slice(i, i + 5));
@@ -149,6 +172,7 @@ export default function DestinationGrid() {
 
   return (
     <section className="overflow-hidden bg-[#fafafa]">
+      {/* Hero section with map */}
       <div className="max-w-7xl mx-auto mb-12 px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <motion.div
@@ -165,7 +189,7 @@ export default function DestinationGrid() {
               At VacayLanka, we believe travel is more than just visiting places — it’s about creating stories you’ll carry forever.
             </p>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -178,8 +202,9 @@ export default function DestinationGrid() {
         </div>
       </div>
 
+      {/* Main content */}
       <div className="max-w-7xl mx-auto px-4">
-        {/* Desktop Accordion */}
+        {/* Desktop - Accordion style grid */}
         <div className="hidden md:flex md:flex-col gap-6">
           {rows.map((row, rowIndex) => {
             const isRowActive = hoveredIndex !== null && Math.floor(hoveredIndex / 5) === rowIndex;
@@ -189,6 +214,7 @@ export default function DestinationGrid() {
               <motion.div
                 key={rowIndex}
                 animate={{ filter: isOtherRowActive ? 'brightness(0.6)' : 'brightness(1)' }}
+                transition={{ duration: 0.4 }}
                 className="flex gap-4 h-[380px]"
               >
                 {row.map((dest, colIndex) => {
@@ -207,26 +233,31 @@ export default function DestinationGrid() {
                         setCurrentPlaceIndex(0);
                       }}
                       className="relative overflow-hidden rounded-[2.5rem] cursor-pointer group shadow-2xl bg-slate-200"
-                      style={{ flex: isHovered ? 5 : (isSiblingHovered ? 0.6 : 1) }}
+                      style={{ flex: isHovered ? 5 : isSiblingHovered ? 0.6 : 1 }}
                     >
                       <Image
                         src={dest.image}
                         alt={dest.name}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
-                        unoptimized
+                        sizes="(max-width: 768px) 100vw, 33vw"
                         priority={globalIndex < 5}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
                       <div className="absolute inset-0 p-8 flex flex-col justify-end">
                         <AnimatePresence>
                           {!isSiblingHovered && (
-                            <motion.div 
-                              initial={{ opacity: 0, y: 10 }} 
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0 }}
+                              transition={{ duration: 0.4 }}
                             >
-                              <h3 className={`font-black text-white uppercase tracking-tighter transition-all duration-500 ${isHovered ? 'text-5xl' : 'text-2xl'}`}>
+                              <h3
+                                className={`font-black text-white uppercase tracking-tighter transition-all duration-500 ${
+                                  isHovered ? 'text-5xl' : 'text-2xl'
+                                }`}
+                              >
                                 {dest.name}
                               </h3>
                               {isHovered && (
@@ -246,7 +277,7 @@ export default function DestinationGrid() {
           })}
         </div>
 
-        {/* Mobile Carousel */}
+        {/* Mobile - Horizontal carousel */}
         <div className="md:hidden">
           <div className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide">
             {destinations.map((dest, index) => (
@@ -263,11 +294,13 @@ export default function DestinationGrid() {
                   alt={dest.name}
                   fill
                   className="object-cover"
-                  unoptimized
+                  sizes="85vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent" />
                 <div className="absolute bottom-0 p-8">
-                  <h3 className="text-white font-black text-3xl uppercase tracking-tighter">{dest.name}</h3>
+                  <h3 className="text-white font-black text-3xl uppercase tracking-tighter">
+                    {dest.name}
+                  </h3>
                   <p className="text-white/80 text-sm mt-2 line-clamp-2">{dest.desc}</p>
                 </div>
               </div>
@@ -276,6 +309,7 @@ export default function DestinationGrid() {
         </div>
       </div>
 
+      {/* Lightbox / Modal */}
       {selectedDest && (
         <Lightbox
           destination={selectedDest}
