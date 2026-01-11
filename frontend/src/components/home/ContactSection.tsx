@@ -2,16 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  MapPin, 
-  Phone, 
-  User, 
-  Send,
-  CheckCircle2
-} from 'lucide-react';
+import { MapPin, Phone, User, Send, CheckCircle2 } from 'lucide-react';
 import Map from '@/components/shared/Map';
 import { useLoading } from '@/context/LoadingContext';
-import { graphqlClient } from '@/lib/graphql-client'; // Adjust path as needed
+import { graphqlClient } from '@/lib/graphql-client';
 
 interface OwnerInfo {
   proprietor_name: string;
@@ -29,8 +23,8 @@ interface OwnerInfo {
 export default function ContactSection() {
   const { startLoading, finishLoading } = useLoading();
   const [formState, setFormState] = useState<'idle' | 'sending' | 'success'>('idle');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [data, setData] = useState<OwnerInfo | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,10 +50,10 @@ export default function ContactSection() {
       try {
         const result = await graphqlClient.request<{ ownerInfo: OwnerInfo }>(query);
         setData(result.ownerInfo);
-        setError(null);
+        setErrorMsg(null);
       } catch (err: any) {
         console.error("Error fetching contact info:", err);
-        setError('Failed to load contact information');
+        setErrorMsg('Failed to load contact information. Please try again later.');
       } finally {
         finishLoading();
       }
@@ -71,6 +65,7 @@ export default function ContactSection() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormState('sending');
+    setErrorMsg(null);
 
     const formData = new FormData(e.currentTarget);
 
@@ -84,6 +79,7 @@ export default function ContactSection() {
       mutation SendEnquiry($name: String!, $email: String!, $phone: String!, $message: String!) {
         sendEnquiry(input: { name: $name, email: $email, phone: $phone, message: $message }) {
           success
+          enquiryId
           message
         }
       }
@@ -97,7 +93,7 @@ export default function ContactSection() {
     };
 
     try {
-      const result = await graphqlClient.request(mutation, variables);
+      const result: any = await graphqlClient.request(mutation, variables);
 
       if (result.sendEnquiry?.success) {
         setFormState('success');
@@ -106,25 +102,23 @@ export default function ContactSection() {
       }
     } catch (err: any) {
       console.error('Enquiry submission error:', err);
+      setErrorMsg(err.message || 'Could not send message. Please try again later.');
       setFormState('idle');
-      alert('Could not send message. Please try again later.');
     }
   };
 
-  if (error) {
+  if (errorMsg && !data) {
     return (
-      <div className="max-w-7xl mx-auto text-center">
-        <p className="text-red-600 font-medium">{error}</p>
+      <div className="max-w-7xl mx-auto text-center py-12">
+        <p className="text-red-600 font-medium text-lg">{errorMsg}</p>
       </div>
     );
   }
 
-  if (!data) {
-    return null; // LoadingContext handles overlay
-  }
+  if (!data) return null;
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-16">
         <motion.span
           initial={{ opacity: 0 }}
@@ -213,6 +207,12 @@ export default function ContactSection() {
                 >
                   <input type="text" name="website_url" className="hidden" tabIndex={-1} autoComplete="off" />
 
+                  {errorMsg && (
+                    <div className="bg-red-50 border-l-4 border-red-500 p-4 text-red-700 text-sm rounded-xl">
+                      {errorMsg}
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="space-y-2">
                       <label className="text-[10px] font-black uppercase tracking-widest text-[#00783e] ml-2">
@@ -289,7 +289,10 @@ export default function ContactSection() {
                     Our travel experts will get back to you within 24 hours.
                   </p>
                   <button
-                    onClick={() => setFormState('idle')}
+                    onClick={() => {
+                      setFormState('idle');
+                      setErrorMsg(null);
+                    }}
                     className="cursor-pointer mt-8 text-sm font-bold text-[#00783e] hover:underline"
                   >
                     Send another message
