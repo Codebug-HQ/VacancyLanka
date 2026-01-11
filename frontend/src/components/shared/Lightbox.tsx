@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { getProxiedImageUrl } from '@/lib/image-proxy';
 
 type Place = {
   title: string;
@@ -66,7 +65,7 @@ export default function Lightbox({ destination, onClose }: LightboxProps) {
       >
         {/* Blurred Background */}
         <motion.div key={`bg-${currentPlaceIndex}`} initial={{ opacity: 0 }} animate={{ opacity: 0.3 }} exit={{ opacity: 0 }} className="absolute inset-0 z-0 pointer-events-none">
-          <Image src={getProxiedImageUrl(currentPlace.image)} fill alt="" className="object-cover blur-[100px] scale-110" />
+          <Image src={currentPlace.image} fill alt="" className="object-cover blur-[100px] scale-110" />
         </motion.div>
 
         {/* Close Button - Smaller on mobile */}
@@ -92,7 +91,7 @@ export default function Lightbox({ destination, onClose }: LightboxProps) {
                 className="absolute inset-0"
               >
                 <Image
-                  src={getProxiedImageUrl(currentPlace.image)}
+                  src={currentPlace.image}
                   alt={currentPlace.title}
                   fill
                   className="object-cover"
