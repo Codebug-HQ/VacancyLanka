@@ -12,7 +12,7 @@ interface Message {
   sender: 'bot' | 'user';
 }
 
-const RAG_API_URL = process.env.NEXT_PUBLIC_RAG_API_URL;
+const RAG_API_URL = process.env.NEXT_PUBLIC_RAG_API_URL!;
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
