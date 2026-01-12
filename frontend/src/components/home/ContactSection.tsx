@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Phone, User, Send, CheckCircle2 } from 'lucide-react';
+import { Send, CheckCircle2 } from 'lucide-react';
 import Map from '@/components/shared/Map';
 import { useLoading } from '@/context/LoadingContext';
 import { graphqlClient } from '@/lib/graphql-client';
@@ -29,19 +29,9 @@ export default function ContactSection() {
   useEffect(() => {
     const fetchData = async () => {
       startLoading();
-
       const query = `
         query GetFormFields {
           ownerInfo {
-            proprietor_name
-            phone_number
-            office_phone
-            office_address
-            whatsapp
-            fb_address
-            insta_address
-            linkedin_address
-            twitter_address
             map_embedded_link
           }
         }
@@ -69,7 +59,6 @@ export default function ContactSection() {
 
     const formData = new FormData(e.currentTarget);
 
-    // Honeypot check
     if (formData.get('website_url')) {
       setFormState('success');
       return;
@@ -94,7 +83,6 @@ export default function ContactSection() {
 
     try {
       const result: any = await graphqlClient.request(mutation, variables);
-
       if (result.sendEnquiry?.success) {
         setFormState('success');
       } else {
@@ -136,59 +124,17 @@ export default function ContactSection() {
         </motion.h2>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-5 space-y-6">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            className="bg-[#00251b] rounded-[2.5rem] p-10 text-white relative overflow-hidden"
-          >
-            <h3 className="text-2xl font-black mb-8 tracking-tight">Direct Contact</h3>
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="bg-white/10 p-3 rounded-2xl h-fit text-[#00783e]">
-                  <MapPin size={20} />
-                </div>
-                <div>
-                  <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">
-                    Office Address
-                  </p>
-                  <p className="text-sm font-medium">{data.office_address}</p>
-                </div>
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        {/* Left Column: Map Only */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          className="lg:col-span-5 min-h-[400px] lg:h-auto rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-inner"
+        >
+          <Map src={data.map_embedded_link} />
+        </motion.div>
 
-              <div className="flex gap-4">
-                <div className="bg-white/10 p-3 rounded-2xl h-fit text-[#00783e]">
-                  <User size={20} />
-                </div>
-                <div>
-                  <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">
-                    Proprietor
-                  </p>
-                  <p className="font-bold">{data.proprietor_name}</p>
-                  <p className="text-sm text-white/60">{data.phone_number}</p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="bg-white/10 p-3 rounded-2xl h-fit text-[#00783e]">
-                  <Phone size={20} />
-                </div>
-                <div>
-                  <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.2em] mb-1">
-                    Office Line
-                  </p>
-                  <p className="font-bold">{data.office_phone}</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          <div className="h-64 rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-inner">
-            <Map src={data.map_embedded_link} />
-          </div>
-        </div>
-
+        {/* Right Column: Form */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}
