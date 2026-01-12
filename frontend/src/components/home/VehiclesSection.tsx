@@ -163,44 +163,60 @@ export default function VehiclesSection() {
               className="group bg-white rounded-[2.5rem] overflow-hidden border border-slate-200 shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 flex flex-col h-full"
             >
               {/* Slider Section */}
-              <div className="relative h-64 md:h-72 group/slider">
-                <Swiper
-                  modules={[Navigation, Pagination, Autoplay]}
-                  navigation={{
-                    nextEl: `.next-${safeId}`,
-                    prevEl: `.prev-${safeId}`,
-                  }}
-                  pagination={{ clickable: true, dynamicBullets: true }}
-                  autoplay={{ delay: 5000, disableOnInteraction: true }}
-                  className="h-full w-full"
-                >
-                  {carImages.map((src, idx) => (
-                    <SwiperSlide key={idx}>
-                      <Image
-                        src={getProxiedImageUrl(src)}
-                        alt={`${car.title} - ${idx + 1}`}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                        unoptimized
-                      />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+<div className="relative h-64 md:h-72 group/slider overflow-hidden rounded-t-[2.5rem] isolate">
+  <Swiper
+    modules={[Navigation, Pagination, Autoplay]}
+    // Navigation IDs
+    navigation={{
+      nextEl: `.next-${safeId}`,
+      prevEl: `.prev-${safeId}`,
+    }}
+    // Pagination & Behavior
+    pagination={{ 
+      clickable: true, 
+      dynamicBullets: true 
+    }}
+    autoplay={{ 
+      delay: 5000, 
+      disableOnInteraction: true 
+    }}
+    // Critical Fixes
+    spaceBetween={0} 
+    slidesPerView={1}
+    centeredSlides={true}
+    watchSlidesProgress={true}
+    className="h-full w-full overflow-hidden"
+  >
+    {carImages.map((src, idx) => (
+      <SwiperSlide key={idx} className="overflow-hidden">
+        <div className="relative w-full h-full overflow-hidden">
+          <Image
+            src={getProxiedImageUrl(src)}
+            alt={`${car.title} - ${idx + 1}`}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            unoptimized
+            priority={idx === 0}
+          />
+        </div>
+      </SwiperSlide>
+    ))}
+  </Swiper>
 
-                {/* Navigation Arrows */}
-                <button className={`next-${safeId} absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/20 backdrop-blur-md p-2 rounded-full text-white opacity-0 group-hover/slider:opacity-100 transition-all hover:bg-white hover:text-[#00783e] active:scale-90`}>
-                  <ChevronRight size={20} />
-                </button>
-                <button className={`prev-${safeId} absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/20 backdrop-blur-md p-2 rounded-full text-white opacity-0 group-hover/slider:opacity-100 transition-all hover:bg-white hover:text-[#00783e] active:scale-90`}>
-                  <ChevronLeft size={20} />
-                </button>
+  {/* Navigation Arrows - Using higher z-index */}
+  <button className={`next-${safeId} absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-black/20 backdrop-blur-md p-2 rounded-full text-white opacity-0 group-hover/slider:opacity-100 transition-all hover:bg-white hover:text-[#00783e] active:scale-90 shadow-lg`}>
+    <ChevronRight size={20} />
+  </button>
+  <button className={`prev-${safeId} absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-black/20 backdrop-blur-md p-2 rounded-full text-white opacity-0 group-hover/slider:opacity-100 transition-all hover:bg-white hover:text-[#00783e] active:scale-90 shadow-lg`}>
+    <ChevronLeft size={20} />
+  </button>
 
-                {/* Price Label */}
-                <div className="absolute top-5 right-5 z-20 bg-[#00251b]/95 backdrop-blur-md text-white px-5 py-2 rounded-2xl border border-white/10 shadow-2xl">
-                  <span className="text-[10px] uppercase tracking-widest text-[#00ea78] block font-black mb-0.5">Daily</span>
-                  <p className="text-xl font-black leading-none">LKR {car.vehicleDetails.pricePerDay}</p>
-                </div>
-              </div>
+  {/* Price Label - Moved to z-30 */}
+  <div className="absolute top-5 right-5 z-30 bg-[#00251b]/95 backdrop-blur-md text-white px-5 py-2 rounded-2xl border border-white/10 shadow-2xl pointer-events-none">
+    <span className="text-[10px] uppercase tracking-widest text-[#00ea78] block font-black mb-0.5">Daily</span>
+    <p className="text-xl font-black leading-none">LKR {car.vehicleDetails.pricePerDay}</p>
+  </div>
+</div>
 
               {/* Content Section */}
               <div className="p-8 flex flex-col flex-grow">
