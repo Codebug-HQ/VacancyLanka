@@ -214,7 +214,7 @@ export default function VehiclesSection() {
   {/* Price Label - Moved to z-30 */}
   <div className="absolute top-5 right-5 z-30 bg-[#00251b]/95 backdrop-blur-md text-white px-5 py-2 rounded-2xl border border-white/10 shadow-2xl pointer-events-none">
     <span className="text-[10px] uppercase tracking-widest text-[#00ea78] block font-black mb-0.5">Daily</span>
-    <p className="text-xl font-black leading-none">LKR {car.vehicleDetails.pricePerDay}</p>
+    <p className="text-xl font-black leading-none">USD {car.vehicleDetails.pricePerDay}</p>
   </div>
 </div>
 
